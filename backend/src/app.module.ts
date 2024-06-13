@@ -13,9 +13,21 @@ import { ReviewModule } from './review/review.module';
 import { WishListModule } from './wish-list/wish-list.module';
 import { ProductCategoryModule } from './product-category/product-category.module';
 import { ProductKeywordModule } from './product-keyword/product-keyword.module';
+//import { TypeOrmModule } from '@nestjs/typeorm';
+import {ConfigModule} from '@nestjs/config'
+import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [CategoryModule, ProductModule, ProductImageModule, ShippingAddressModule, OrderModule, PaymentModule, ShipmentModule, OrderDetailModule, ReviewModule, WishListModule, ProductCategoryModule, ProductKeywordModule],
+  imports: [ConfigModule.forRoot({
+    isGlobal:true
+  }), /*
+    DatabaseModule,
+    */CategoryModule, ProductModule, 
+    ProductImageModule, ShippingAddressModule, 
+    OrderModule, PaymentModule, ShipmentModule, 
+    OrderDetailModule, ReviewModule, WishListModule, 
+    ProductCategoryModule, ProductKeywordModule,
+   ],
   controllers: [AppController],
   providers: [AppService],
 })
