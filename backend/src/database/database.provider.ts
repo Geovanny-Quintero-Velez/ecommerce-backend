@@ -9,10 +9,11 @@ export const DatabaseProvider:DynamicModule = TypeOrmModule.forRootAsync({
         const dbConfig={
             type: config.get("DATABASE_TYPE"),
             host: config.get("DATABASE_HOST"),
-            port: config.get("DATABASE_PORT"),
+            port: +config.get("DATABASE_PORT"),
             username:config.get("DATABASE_USER"),
             password:config.get("DATABASE_PASSWORD"),
-            database:config.get("DATABASE")
+            database:config.get("DATABASE"),
+            ssl:true
         } as DataSourceOptions
         
         return dbConfig
