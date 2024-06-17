@@ -14,7 +14,6 @@ export const DatabaseProvider:DynamicModule = TypeOrmModule.forRootAsync({
             password:config.get("DATABASE_PASSWORD"),
             database:config.get("DATABASE"),
             ssl:true,
-            synchronize:true,
             autoLoadEntities:true
         } as DataSourceOptions
         

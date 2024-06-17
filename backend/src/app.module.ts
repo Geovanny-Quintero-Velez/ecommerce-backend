@@ -15,6 +15,7 @@ import { ProductCategoryModule } from './product-category/product-category.modul
 import { ProductKeywordModule } from './product-keyword/product-keyword.module';
 import {ConfigModule} from '@nestjs/config'
 import { DatabaseModule } from './database/database.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -25,7 +26,7 @@ import { DatabaseModule } from './database/database.module';
     ProductImageModule, ShippingAddressModule, 
     OrderModule, PaymentModule, ShipmentModule, 
     OrderDetailModule, ReviewModule, WishListModule, 
-    ProductCategoryModule, ProductKeywordModule,
+    ProductCategoryModule, ProductKeywordModule, UserModule,
    ],
   controllers: [AppController],
   providers: [AppService],
