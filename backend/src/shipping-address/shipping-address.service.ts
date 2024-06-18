@@ -36,7 +36,7 @@ export class ShippingAddressService {
       ...updateShippingAddressDto
     })
     if(!shipA){
-      throw new NotFoundException("Shipment not found")
+      throw new NotFoundException("Shipping Address not found")
     }
     return await this.shippingAddressesRepository.save(shipA);
   }
