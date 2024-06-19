@@ -11,7 +11,7 @@ export class CreateOrderDto {
   userid: string;
 
   @IsUUID()
-  @IsNotEmpty()
+  @IsOptional()
   addressid: string;
 
   @IsNumber()

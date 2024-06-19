@@ -29,6 +29,6 @@ export class ShipmentController {
 
   @Delete(':id')
   remove(@Param("id", ParseUUIDPipe) id:string) {
-    return this.shipmentService.remove(+id);
+    return this.shipmentService.remove(id);
   }
 }

@@ -24,11 +24,11 @@ export class OrderDetailController {
 
   @Patch(':id')
   update(@Param("id", ParseUUIDPipe) id:string, @Body() updateOrderDetailDto: UpdateOrderDetailDto) {
-    return this.orderDetailService.update(+id, updateOrderDetailDto);
+    return this.orderDetailService.update(id, updateOrderDetailDto);
   }
 
   @Delete(':id')
   remove(@Param("id", ParseUUIDPipe) id:string) {
-    return this.orderDetailService.remove(+id);
+    return this.orderDetailService.remove(id);
   }
 }

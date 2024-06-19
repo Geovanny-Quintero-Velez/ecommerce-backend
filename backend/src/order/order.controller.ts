@@ -29,6 +29,6 @@ export class OrderController {
 
   @Delete(':id')
   remove(@Param("id", ParseUUIDPipe) id:string) {
-    return this.orderService.remove(+id);
+    return this.orderService.remove(id);
   }
 }

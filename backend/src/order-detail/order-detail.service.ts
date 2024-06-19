@@ -26,16 +26,39 @@ export class OrderDetailService {
     return orderDetail;
   }
 
+  async findByProductIdOrderID(orderidP: string,productidP:string): Promise<OrderDetail> {
+    const orderDetail = await this.orderDetailsRepository.findOne({ where: { orderid: orderidP ,productid:productidP} });
+    if (!orderDetail) {
+      throw new NotFoundException(`Order Detail not found`);
+    }
+    return orderDetail;
+  }
+
+  async isReplicated(id: string,productid:string) {
+    const orderDetail = await this.orderDetailsRepository.find({ where: { orderid: id } });
+    let out=null
+    for(let i=0;i<orderDetail.length;i++){
+      if(orderDetail[i].productid==productid){
+        out=orderDetail[i]
+        break;
+      }
+    }
+    return out;
+  }
+
   async findAll() {
     return await this.orderDetailsRepository.find()
   }
 
-  async update(id: number, updateOrderDetailDto: UpdateOrderDetailDto) {
+  async update(id: uuid, updateOrderDetailDto: UpdateOrderDetailDto) {
+    if(!updateOrderDetailDto.orderdetailid){
+      updateOrderDetailDto.orderdetailid=id
+    }
     const orderD = await this.orderDetailsRepository.preload({
       ...updateOrderDetailDto
     })
     if(!orderD){
-      throw new NotFoundException("Order not found")
+      throw new NotFoundException("Order Detail not found")
     }
     return await this.orderDetailsRepository.save(orderD);
   }
@@ -44,4 +67,11 @@ export class OrderDetailService {
     const orderD=await this.findOne(id)
     return await this.orderDetailsRepository.remove(orderD);
   }
+
+  async removeByProductIdOrderID(orderidP: string,productidP:string) {
+    const orderD=await this.findByProductIdOrderID(orderidP,productidP)
+    return await this.orderDetailsRepository.remove(orderD);
+  }
+
+
 }

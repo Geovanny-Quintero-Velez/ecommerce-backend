@@ -31,7 +31,7 @@ export class OrderService {
     return await this.ordersRepository.find();
   }
 
-  async update(id: number, updateOrderDto: UpdateOrderDto) {
+  async update(id: uuid, updateOrderDto: UpdateOrderDto) {
     const order = await this.ordersRepository.preload({
       ...updateOrderDto
     })

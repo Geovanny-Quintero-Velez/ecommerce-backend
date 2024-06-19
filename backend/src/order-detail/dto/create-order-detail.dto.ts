@@ -4,29 +4,29 @@ import { Type } from 'class-transformer';
 export class CreateOrderDetailDto {
     @IsUUID()
     @IsOptional()
-    orderDetailId?: string;
+    orderdetailid?: string;
   
     @IsUUID()
     @IsNotEmpty()
-    orderId: string;
+    orderid: string;
   
     @IsUUID()
     @IsNotEmpty()
-    productId: string;
+    productid: string;
   
     @IsInt()
     @IsNotEmpty()
     quantity: number;
   
     @IsNumber()
-    @IsNotEmpty()
-    price?: number;
+    @IsOptional()
+    price: number;
   
     @Type(() => Date)
     @IsOptional()
-    createdAt?: Date;
+    createdat?: Date;
   
     @Type(() => Date)
     @IsOptional()
-    deletedAt?: Date;
+    deletedat?: Date;
 }
