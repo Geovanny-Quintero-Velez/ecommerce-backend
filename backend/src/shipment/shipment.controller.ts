@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { ShipmentService } from './shipment.service';
 import { CreateShipmentDto } from './dto/create-shipment.dto';
 import { UpdateShipmentDto } from './dto/update-shipment.dto';
@@ -18,17 +18,17 @@ export class ShipmentController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.shipmentService.findOne(+id);
+  findOne(@Param("id", ParseUUIDPipe) id:string) {
+    return this.shipmentService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateShipmentDto: UpdateShipmentDto) {
+  update(@Param("id", ParseUUIDPipe) id:string, @Body() updateShipmentDto: UpdateShipmentDto) {
     return this.shipmentService.update(+id, updateShipmentDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.shipmentService.remove(+id);
+  remove(@Param("id", ParseUUIDPipe) id:string) {
+    return this.shipmentService.remove(id);
   }
 }

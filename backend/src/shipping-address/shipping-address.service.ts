@@ -1,26 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateShippingAddressDto } from './dto/create-shipping-address.dto';
 import { UpdateShippingAddressDto } from './dto/update-shipping-address.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ShippingAddress } from './entities/shipping-address.entity';
+import { Repository } from 'typeorm';
+import {v4 as uuid} from  'uuid';
 
 @Injectable()
 export class ShippingAddressService {
-  create(createShippingAddressDto: CreateShippingAddressDto) {
-    return 'This action adds a new shippingAddress';
+  constructor(
+    @InjectRepository(ShippingAddress)
+    private shippingAddressesRepository: Repository<ShippingAddress>,
+  ) {}
+
+  async create(createShippingAddressDto: CreateShippingAddressDto): Promise<ShippingAddress> {
+    const shippingAddress = this.shippingAddressesRepository.create(createShippingAddressDto);
+    return this.shippingAddressesRepository.save(shippingAddress);
   }
 
-  findAll() {
-    return `This action returns all shippingAddress`;
+  async findOne(id: string): Promise<ShippingAddress> {
+    const shippingAddress = await this.shippingAddressesRepository.findOne({ where: { addressid: id } });
+    if (!shippingAddress) {
+      throw new NotFoundException(`ShippingAddress with ID ${id} not found`);
+    }
+    return shippingAddress;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} shippingAddress`;
+  async findAll() {
+    return await this.shippingAddressesRepository.find();
   }
 
-  update(id: number, updateShippingAddressDto: UpdateShippingAddressDto) {
-    return `This action updates a #${id} shippingAddress`;
+
+  async update(id: uuid, updateShippingAddressDto: UpdateShippingAddressDto) {
+    const shipA = await this.shippingAddressesRepository.preload({
+      ...updateShippingAddressDto
+    })
+    if(!shipA){
+      throw new NotFoundException("Shipping Address not found")
+    }
+    return await this.shippingAddressesRepository.save(shipA);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} shippingAddress`;
+  async remove(id: uuid) {
+    const shipD=await this.findOne(id)
+    return await this.shippingAddressesRepository.remove(shipD);
   }
 }

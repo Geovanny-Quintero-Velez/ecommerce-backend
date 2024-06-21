@@ -1,26 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateShipmentDto } from './dto/create-shipment.dto';
 import { UpdateShipmentDto } from './dto/update-shipment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Shipment } from './entities/shipment.entity';
+import { Repository } from 'typeorm';
+import {v4 as uuid} from  'uuid';
 
 @Injectable()
 export class ShipmentService {
-  create(createShipmentDto: CreateShipmentDto) {
-    return 'This action adds a new shipment';
+
+  constructor(
+    @InjectRepository(Shipment)
+    private shipmentsRepository: Repository<Shipment>,
+  ) {}
+
+  async create(createShipmentDto: CreateShipmentDto): Promise<Shipment> {
+    const shipment = this.shipmentsRepository.create(createShipmentDto);
+    return this.shipmentsRepository.save(shipment);
   }
 
-  findAll() {
-    return `This action returns all shipment`;
+  async findOne(id: string): Promise<Shipment> {
+    const shipment = await this.shipmentsRepository.findOne({ where: { shipmentid: id } });
+    if (!shipment) {
+      throw new NotFoundException(`Shipment with ID ${id} not found`);
+    }
+    return shipment;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} shipment`;
+  async findAll() {
+    return await this.shipmentsRepository.find();
   }
 
-  update(id: number, updateShipmentDto: UpdateShipmentDto) {
-    return `This action updates a #${id} shipment`;
+
+  async update(id: uuid, updateShipmentDto: UpdateShipmentDto) {
+    const shipD = await this.shipmentsRepository.preload({
+      ...updateShipmentDto
+    })
+    if(!shipD){
+      throw new NotFoundException("Shipment not found")
+    }
+    return await this.shipmentsRepository.save(shipD);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} shipment`;
+  async remove(id: uuid) {
+    const shipD=await this.findOne(id)
+    return await this.shipmentsRepository.remove(shipD);
   }
 }
