@@ -1,4 +1,4 @@
-import { IsDate, IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, Length } from 'class-validator';
+import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Length } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateUserDto {
@@ -28,9 +28,11 @@ export class CreateUserDto {
     @Length(8, 255)
     password: string;
   
-    @IsString()
-    @IsOptional()
-    role?: string;
+    //@IsString()
+    //@IsOptional()
+    @IsEnum(['admin', 'user'])
+    @IsNotEmpty()
+    role: string;
   
     @IsString()
     @IsOptional()
