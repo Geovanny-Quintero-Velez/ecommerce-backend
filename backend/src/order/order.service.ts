@@ -45,4 +45,27 @@ export class OrderService {
     const order=await this.findOne(id)
     return await this.ordersRepository.remove(order);
   }
+
+  async getOrderSummary(orderId: string): Promise<any> {
+    const query = this.ordersRepository.createQueryBuilder('o')
+      .select([
+        'o.orderid',
+        'o.createdat AS order_created_at',
+        'o.price AS order_total_price',
+        'od.quantity',
+        'od.price AS product_price',
+        'p.name AS product_name',
+        'p.description AS product_description'
+      ])
+      .innerJoin('orderdetail', 'od', 'o.orderid = od.orderid')
+      .innerJoin('product', 'p', 'od.productid = p.productid')
+      .where('o.orderid = :orderId', { orderId })
+      .orderBy('p.name');
+  
+    const result = await query.getRawMany();
+    if (!result) {
+      throw new NotFoundException(`Order summary for ID ${orderId} not found`);
+    }
+    return result;
+  }
 }
