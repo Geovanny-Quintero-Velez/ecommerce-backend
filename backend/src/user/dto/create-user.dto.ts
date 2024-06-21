@@ -1,5 +1,6 @@
-import { IsDate, IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, Length } from 'class-validator';
+import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Length } from 'class-validator';
 import { Type } from 'class-transformer';
+import { Role } from '../role/role.enum';
 
 export class CreateUserDto {
     @IsUUID()
@@ -30,7 +31,7 @@ export class CreateUserDto {
   
     @IsString()
     @IsOptional()
-    role?: string;
+    role: string;
   
     @IsString()
     @IsOptional()
