@@ -22,16 +22,8 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   password: string;
 
-  /*@Column({ type: 'varchar', length: 50, nullable: true })
-  role?: string;*/
-
-  @Column({
-    type: 'enum',
-    enum: Role,
-    default: Role.USER,
-    nullable: false,
-  })
-  role: Role;
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  role?: string;
 
   @Column({ type: 'varchar', length: 100, unique: true, nullable: true })
   username?: string;

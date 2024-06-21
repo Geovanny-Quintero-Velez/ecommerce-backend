@@ -1,5 +1,6 @@
 import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Length } from 'class-validator';
 import { Type } from 'class-transformer';
+import { Role } from '../role/role.enum';
 
 export class CreateUserDto {
     @IsUUID()
@@ -28,10 +29,8 @@ export class CreateUserDto {
     @Length(8, 255)
     password: string;
   
-    //@IsString()
-    //@IsOptional()
-    @IsEnum(['admin', 'user'])
-    @IsNotEmpty()
+    @IsString()
+    @IsOptional()
     role: string;
   
     @IsString()
