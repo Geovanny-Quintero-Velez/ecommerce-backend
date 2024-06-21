@@ -38,6 +38,7 @@ export class UserService {
   }
 
   async findAll() {
+    //TODO: Implement check permissions in controller -> Adjust to have JWT Tokens
     return await this.usersRepository.find();
   }
 
@@ -52,6 +53,7 @@ export class UserService {
   }
 
   async remove(id: uuid) {
+    //TODO: Implement check permissions in controller -> Adjust to have JWT Tokens
     const user=await this.findOne(id)
     return await this.usersRepository.remove(user);
   }
