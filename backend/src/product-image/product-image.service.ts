@@ -1,26 +1,50 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, Param, ParseUUIDPipe } from '@nestjs/common';
 import { CreateProductImageDto } from './dto/create-product-image.dto';
 import { UpdateProductImageDto } from './dto/update-product-image.dto';
+import { ProductImage } from './entities/product-image.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProductImageService {
-  create(createProductImageDto: CreateProductImageDto) {
-    return 'This action adds a new productImage';
+  constructor(
+    @InjectRepository(ProductImage)
+    private productImageRepository: Repository<ProductImage>,
+  ) {}
+
+  async create(createProductImageDto: CreateProductImageDto): Promise<ProductImage> {
+    const productImage = this.productImageRepository.create(createProductImageDto);
+    return this.productImageRepository.save(productImage);
   }
 
-  findAll() {
-    return `This action returns all productImage`;
+  async update(@Param("id", ParseUUIDPipe) id:string, updateProductImageDto: UpdateProductImageDto): Promise<ProductImage> {
+    
+    const productImage = await this.productImageRepository.preload({
+      ...updateProductImageDto,
+    });
+    
+    if (!productImage) {
+      throw new NotFoundException('ProductImage not found');
+    }
+    return this.productImageRepository.save(productImage);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} productImage`;
+  async findAll(){
+    return await this.productImageRepository.find({})
   }
 
-  update(id: number, updateProductImageDto: UpdateProductImageDto) {
-    return `This action updates a #${id} productImage`;
+  async findOne(@Param("id", ParseUUIDPipe) id:string): Promise<ProductImage> {
+    const productImage = await this.productImageRepository.findOne({ where: { imageid: id } });
+    if (!productImage) {
+      throw new NotFoundException('ProductImage not found');
+    }
+    return productImage;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} productImage`;
+  async remove(@Param("id", ParseUUIDPipe) id:string): Promise<void> {
+    const result = await this.productImageRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException('ProductImage not found');
+    }
   }
 }

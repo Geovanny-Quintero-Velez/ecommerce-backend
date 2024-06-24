@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { ProductCategoryService } from './product-category.service';
 import { CreateProductCategoryDto } from './dto/create-product-category.dto';
 import { UpdateProductCategoryDto } from './dto/update-product-category.dto';
@@ -17,18 +17,19 @@ export class ProductCategoryController {
     return this.productCategoryService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productCategoryService.findOne(+id);
+  @Get(':categoryid')
+  findByCategory(@Param("categoryid", ParseUUIDPipe) categoryid:string) {
+    return this.productCategoryService.findCategory(categoryid);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductCategoryDto: UpdateProductCategoryDto) {
-    return this.productCategoryService.update(+id, updateProductCategoryDto);
+  @Get(':categoryid/:productid')
+  findOne(@Param("categoryid", ParseUUIDPipe) categoryid:string,@Param("productid", ParseUUIDPipe) productid:string,) {
+    return this.productCategoryService.findOne(categoryid,productid);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productCategoryService.remove(+id);
+
+  @Delete(':categoryid/:productid')
+  remove(@Param("categoryid", ParseUUIDPipe) categoryid:string,@Param("productid", ParseUUIDPipe) productid:string) {
+    return this.productCategoryService.remove(categoryid,productid);
   }
 }

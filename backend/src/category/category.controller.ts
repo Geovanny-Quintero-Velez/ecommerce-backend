@@ -24,11 +24,11 @@ export class CategoryController {
 
   @Put(':id')
   update(@Param("id", ParseUUIDPipe) id:string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoryService.update(+id, updateCategoryDto);
+    return this.categoryService.update(id, updateCategoryDto);
   }
 
   @Delete(':id')
   remove(@Param("id", ParseUUIDPipe) id:string) {
-    return this.categoryService.remove(+id);
+    return this.categoryService.remove(id);
   }
 }

@@ -19,16 +19,16 @@ export class ProductImageController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.productImageService.findOne(+id);
+    return this.productImageService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductImageDto: UpdateProductImageDto) {
-    return this.productImageService.update(+id, updateProductImageDto);
+    return this.productImageService.update(id, updateProductImageDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.productImageService.remove(+id);
+    return this.productImageService.remove(id);
   }
 }

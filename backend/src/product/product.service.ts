@@ -5,17 +5,29 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import {v4 as uuid} from  'uuid';
 import { Repository } from 'typeorm';
+import { ProductCategoryService } from 'src/product-category/product-category.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
+    private readonly productCategoryService:ProductCategoryService
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const product = this.productsRepository.create(createProductDto);
     return this.productsRepository.save(product);
+  }
+
+  async findByCategory( id:string) {
+    const products= await this.productCategoryService.findCategory(id)
+    let out=[]
+    for(let i=0;i<products.length;i++){
+      const product=products[i]
+      out.push(this.findOne(product.productid))
+    }
+    return out;
   }
 
   async findOne(id: string): Promise<Product> {

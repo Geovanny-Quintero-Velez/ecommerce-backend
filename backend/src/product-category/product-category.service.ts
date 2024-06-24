@@ -1,26 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductCategoryDto } from './dto/create-product-category.dto';
 import { UpdateProductCategoryDto } from './dto/update-product-category.dto';
+import { ProductCategory } from './entities/product-category.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProductCategoryService {
-  create(createProductCategoryDto: CreateProductCategoryDto) {
-    return 'This action adds a new productCategory';
+  constructor(
+    @InjectRepository(ProductCategory)
+    private productCategoryRepository: Repository<ProductCategory>,
+  ) {}
+
+  async create(createProductCategoryDto: CreateProductCategoryDto): Promise<ProductCategory> {
+    const productCategory = this.productCategoryRepository.create(createProductCategoryDto);
+    return this.productCategoryRepository.save(productCategory);
   }
 
-  findAll() {
-    return `This action returns all productCategory`;
+  async remove(productid: string, categoryid: string): Promise<void> {
+    const result = await this.productCategoryRepository.delete({ productid, categoryid });
+    if (result.affected === 0) {
+      throw new NotFoundException('ProductCategory not found');
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} productCategory`;
+  async findAll(): Promise<ProductCategory[]> {
+    return this.productCategoryRepository.find({ relations: ['product', 'category'] });
   }
 
-  update(id: number, updateProductCategoryDto: UpdateProductCategoryDto) {
-    return `This action updates a #${id} productCategory`;
+  async findOne(productid: string, categoryid: string): Promise<ProductCategory> {
+    const productCategory = await this.productCategoryRepository.findOne({ where: { productid, categoryid }, relations: ['product', 'category'] });
+    if (!productCategory) {
+      throw new NotFoundException('ProductCategory not found');
+    }
+    return productCategory;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} productCategory`;
+  async findCategory( categoryid: string): Promise<ProductCategory[]> {
+    const productCategory = await this.productCategoryRepository.find({ where: {  categoryid }, relations: ['product', 'category'] });
+    if (!productCategory) {
+      throw new NotFoundException('ProductCategory not found');
+    }
+    return productCategory;
   }
 }
