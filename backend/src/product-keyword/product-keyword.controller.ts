@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ProductKeywordService } from './product-keyword.service';
 import { CreateProductKeywordDto } from './dto/create-product-keyword.dto';
 import { UpdateProductKeywordDto } from './dto/update-product-keyword.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('product-keyword')
+@ApiTags("Product Keyword")
 export class ProductKeywordController {
   constructor(private readonly productKeywordService: ProductKeywordService) {}
 

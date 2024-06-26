@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from
 import { OrderDetailService } from './order-detail.service';
 import { CreateOrderDetailDto } from './dto/create-order-detail.dto';
 import { UpdateOrderDetailDto } from './dto/update-order-detail.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('order-detail')
+@ApiTags("Order Detail")
 export class OrderDetailController {
   constructor(private readonly orderDetailService: OrderDetailService) {}
 

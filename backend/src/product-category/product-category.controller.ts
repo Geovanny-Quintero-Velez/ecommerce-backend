@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from
 import { ProductCategoryService } from './product-category.service';
 import { CreateProductCategoryDto } from './dto/create-product-category.dto';
 import { UpdateProductCategoryDto } from './dto/update-product-category.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('product-category')
+@ApiTags("Product Category")
 export class ProductCategoryController {
   constructor(private readonly productCategoryService: ProductCategoryService) {}
 

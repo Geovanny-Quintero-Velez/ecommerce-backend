@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from
 import { ShippingAddressService } from './shipping-address.service';
 import { CreateShippingAddressDto } from './dto/create-shipping-address.dto';
 import { UpdateShippingAddressDto } from './dto/update-shipping-address.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('shipping-address')
+@ApiTags("Shipping Address")
 export class ShippingAddressController {
   constructor(private readonly shippingAddressService: ShippingAddressService) {}
 
