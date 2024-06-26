@@ -1,4 +1,4 @@
-import { IsDecimal, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsDecimal, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateOrderDto {
@@ -15,6 +15,7 @@ export class CreateOrderDto {
   addressid: string;
 
   @IsNumber()
+  @IsPositive()
   @IsNotEmpty()
   price: number;
 

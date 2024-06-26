@@ -15,7 +15,24 @@ export class OrderService {
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
-    const order = this.ordersRepository.create(createOrderDto);
+    let toCreateOrder = new Order();
+    toCreateOrder.setPrice(createOrderDto.price);
+    if(createOrderDto.addressid){
+      toCreateOrder.addressid=createOrderDto.addressid
+    }
+    if(createOrderDto.createdat){
+      toCreateOrder.createdat=createOrderDto.createdat
+    }
+    if(createOrderDto.orderid){
+      toCreateOrder.orderid=createOrderDto.orderid
+    }
+    if(createOrderDto.status){
+      toCreateOrder.status=createOrderDto.status
+    }
+    if(createOrderDto.userid){
+      toCreateOrder.userid=createOrderDto.userid
+    }
+    const order = this.ordersRepository.create(toCreateOrder);
     return this.ordersRepository.save(order);
   }
 
@@ -32,12 +49,35 @@ export class OrderService {
   }
 
   async update(id: uuid, updateOrderDto: UpdateOrderDto) {
+    let toCreateOrder = new Order();
+    toCreateOrder.setPrice(updateOrderDto.price);
+    if(updateOrderDto.addressid){
+      toCreateOrder.addressid=updateOrderDto.addressid
+    }
+    if(updateOrderDto.createdat){
+      toCreateOrder.createdat=updateOrderDto.createdat
+    }
+    if(updateOrderDto.orderid){
+      toCreateOrder.orderid=updateOrderDto.orderid
+    }else{
+      toCreateOrder.orderid=id
+    }
+    if(updateOrderDto.status){
+      toCreateOrder.status=updateOrderDto.status
+    }
+    if(updateOrderDto.userid){
+      toCreateOrder.userid=updateOrderDto.userid
+    }
     const order = await this.ordersRepository.preload({
-      ...updateOrderDto
+      ...toCreateOrder
     })
     if(!order){
       throw new NotFoundException("Order not found")
     }
+    return await this.ordersRepository.save(order);
+  }
+
+  async updateOrder(id: uuid, order: Order) {
     return await this.ordersRepository.save(order);
   }
 

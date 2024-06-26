@@ -34,12 +34,13 @@ export class ShoppingCartService {
             price: +item.price
           }
           await this.orderDetailService.create(orderD)
-          order.price=(+order.price)+(+orderD.price)
-          response=await this.orderService.update(order.orderid,order)
+          order.add(orderD.price)
+          response=await this.orderService.updateOrder(order.orderid,order)
         }else {
           await this.orderDetailService.update(itemBeforeUpdate.orderdetailid,item)
-          order.price=(+order.price)-(+itemBeforeUpdate.price)+(+item.price)
-          response=await this.orderService.update(order.orderid,order)
+          order.subtract(itemBeforeUpdate.price)
+          order.add(item.price)
+          response=await this.orderService.updateOrder(order.orderid,order)
       }
     }
     return {updateShoppingCartDto,order:response};
@@ -51,8 +52,8 @@ export class ShoppingCartService {
       throw new NotFoundException("Order not found")
     }
     const detail=await this.orderDetailService.removeByProductIdOrderID(orderid,productid)
-    order.price=(+order.price)-(+detail.price)
-    await this.orderService.update(order.orderid,order)
+    order.subtract(detail.price)
+    await this.orderService.updateOrder(order.orderid,order)
     return {order,detail};
   }
 
@@ -62,7 +63,7 @@ export class ShoppingCartService {
       throw new NotFoundException("Order not found")
     }
     order.status="toPay"
-    await this.orderService.update(order.orderid,order)
+    await this.orderService.updateOrder(order.orderid,order)
     const newShoppingCart={
       userid: order.userid,
       price: 0,
