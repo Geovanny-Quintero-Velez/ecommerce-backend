@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { ProductKeywordService } from './product-keyword.service';
 import { CreateProductKeywordDto } from './dto/create-product-keyword.dto';
 import { UpdateProductKeywordDto } from './dto/update-product-keyword.dto';
@@ -20,17 +20,17 @@ export class ProductKeywordController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param("id", ParseUUIDPipe) id:string) {
     return this.productKeywordService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductKeywordDto: UpdateProductKeywordDto) {
+  update(@Param("id", ParseUUIDPipe) id:string, @Body() updateProductKeywordDto: UpdateProductKeywordDto) {
     return this.productKeywordService.update(+id, updateProductKeywordDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param("id", ParseUUIDPipe) id:string) {
     return this.productKeywordService.remove(+id);
   }
 }
