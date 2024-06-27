@@ -5,7 +5,7 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/user/Role/role.enum';
-import { Roles } from 'decorator/rol.decorator';
+import { Roles } from 'src/decorator/rol.decorator';
 
 @Controller('order')
 @ApiTags("Order")

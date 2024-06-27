@@ -5,7 +5,7 @@ import { UpdateProductKeywordDto } from './dto/update-product-keyword.dto';
 import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/user/Role/role.enum';
-import { Roles } from 'decorator/rol.decorator';
+import { Roles } from 'src/decorator/rol.decorator';
 
 @Controller('product-keyword')
 @ApiTags("Product Keyword")
