@@ -38,4 +38,9 @@ export class OrderController {
   remove(@Param("id", ParseUUIDPipe) id:string) {
     return this.orderService.remove(id);
   }
+
+  @Get(':id/summary')
+  getOrderSummary(@Param("id", ParseUUIDPipe) id: string) {
+    return this.orderService.getOrderSummary(id);
+  }
 }
