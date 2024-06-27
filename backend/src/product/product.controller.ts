@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGu
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/decorator/rol.decorator';
 import { Role } from 'src/user/Role/role.enum';
@@ -36,6 +36,28 @@ export class ProductController {
   @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @ApiResponse({
+    status: 200,
+    description: 'The found record',
+    schema: {
+      example: {
+        productid: "string",
+        name: "string",
+        imageurls: ["string","string"],
+        description: "string",
+        price: 0,
+        stock: 0,
+        rating: 0,
+        reviewscount: 0,
+        discount: 0,
+        createdat: "2024-06-17T10:13:59.387Z",
+        deletedat: "2024-06-17T10:13:59.387Z",
+        lastmodifiedby: "string",
+        lastmodifiedat: "2024-06-17T10:13:59.387Z",
+        keywords: ["string","string"]
+      }
+    }
+  })
   async find(@Param("id", ParseUUIDPipe) id:string) {
     return this.productService.findProductSummary(id);
   }
