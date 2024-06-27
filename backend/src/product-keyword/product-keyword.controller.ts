@@ -36,7 +36,7 @@ export class ProductKeywordController {
   @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
   findOne(@Param("id", ParseUUIDPipe) id:string) {
-    return this.productKeywordService.findOne(+id);
+    return this.productKeywordService.findOne(id);
   }
 
   @Patch(':id')
@@ -45,7 +45,7 @@ export class ProductKeywordController {
   @Roles([Role.ADMIN])
   @ApiBearerAuth()
   update(@Param("id", ParseUUIDPipe) id:string, @Body() updateProductKeywordDto: UpdateProductKeywordDto) {
-    return this.productKeywordService.update(+id, updateProductKeywordDto);
+    return this.productKeywordService.update(id, updateProductKeywordDto);
   }
 
   @Delete(':id')
@@ -54,6 +54,6 @@ export class ProductKeywordController {
   @Roles([Role.ADMIN])
   @ApiBearerAuth()
   remove(@Param("id", ParseUUIDPipe) id:string) {
-    return this.productKeywordService.remove(+id);
+    return this.productKeywordService.remove(id);
   }
 }

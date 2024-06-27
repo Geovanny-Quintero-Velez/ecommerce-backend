@@ -3,11 +3,11 @@ import { IsNotEmpty, IsOptional, IsString, IsUUID, IsInt, Min, Max } from 'class
 export class CreateReviewDto {
   @IsUUID()
   @IsNotEmpty()
-  userId: string;
+  userid: string;
 
   @IsUUID()
   @IsNotEmpty()
-  productId: string;
+  productid: string;
 
   @IsString()
   @IsOptional()

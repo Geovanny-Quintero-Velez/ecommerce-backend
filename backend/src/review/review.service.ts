@@ -19,7 +19,7 @@ export class ReviewService {
 
   async update(id: string, updateReviewDto: UpdateReviewDto): Promise<Review> {
     const review = await this.reviewRepository.preload({
-      reviewId: id,
+      reviewid: id,
       ...updateReviewDto,
     });
     if (!review) {
@@ -29,7 +29,7 @@ export class ReviewService {
   }
 
   async findOne(id: string): Promise<Review> {
-    const review = await this.reviewRepository.findOne({ where: { reviewId: id } });
+    const review = await this.reviewRepository.findOne({ where: { reviewid: id } });
     if (!review) {
       throw new NotFoundException('Review not found');
     }

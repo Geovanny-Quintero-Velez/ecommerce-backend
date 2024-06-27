@@ -24,7 +24,7 @@ export class ProductCategoryController {
   @Get()
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)
-  @Roles([Role.ADMIN])
+  @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
   findAll() {
     return this.productCategoryService.findAll();
@@ -33,7 +33,7 @@ export class ProductCategoryController {
   @Get(':categoryid')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)
-  @Roles([Role.ADMIN])
+  @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
   findByCategory(@Param("categoryid", ParseUUIDPipe) categoryid:string) {
     return this.productCategoryService.findCategory(categoryid);
@@ -42,7 +42,7 @@ export class ProductCategoryController {
   @Get(':categoryid/:productid')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)
-  @Roles([Role.ADMIN])
+  @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
   findOne(@Param("categoryid", ParseUUIDPipe) categoryid:string,@Param("productid", ParseUUIDPipe) productid:string,) {
     return this.productCategoryService.findOne(categoryid,productid);

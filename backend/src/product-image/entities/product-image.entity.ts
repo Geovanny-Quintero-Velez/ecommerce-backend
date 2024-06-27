@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, DeleteDateColumn } from 'typeorm';
-@Entity('ProductImage')
+@Entity('productimage')
 export class ProductImage {
   @PrimaryGeneratedColumn('uuid')
   imageid: string;
