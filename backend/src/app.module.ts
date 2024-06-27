@@ -17,6 +17,7 @@ import {ConfigModule} from '@nestjs/config'
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -27,7 +28,7 @@ import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
     ProductImageModule, ShippingAddressModule, 
     OrderModule, PaymentModule, ShipmentModule, 
     OrderDetailModule, ReviewModule, WishListModule, 
-    ProductCategoryModule, ProductKeywordModule, UserModule, ShoppingCartModule,
+    ProductCategoryModule, ProductKeywordModule, UserModule, ShoppingCartModule, AuthModule,
    ],
   controllers: [AppController],
   providers: [AppService],
