@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const PATH_DEFAULT=""
@@ -19,7 +19,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('E-COMERCE example')
-    .setDescription('The E-COMERCE API description')
+    .setDescription('The E-COMERCE API ')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
