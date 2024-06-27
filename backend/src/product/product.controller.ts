@@ -17,7 +17,7 @@ export class ProductController {
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @Roles([Role.ADMIN])
   @ApiBearerAuth()
-  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"}) 
   async create(@Body() createProductDto: CreateProductDto) {
     return this.productService.create(createProductDto);
   }

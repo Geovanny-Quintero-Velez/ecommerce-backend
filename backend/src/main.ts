@@ -19,7 +19,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Fooddy´s API')
-    .setDescription('The E-COMERCE Fooddy´s API to mange users and products')
+    .setDescription('The E-COMERCE Fooddy´s API to manage users and products')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
