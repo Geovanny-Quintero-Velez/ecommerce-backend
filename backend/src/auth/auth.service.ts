@@ -37,10 +37,11 @@ export class AuthService {
 
     if(!checkPassword) throw new HttpException('INVALID_PASSWORD', HttpStatus.FORBIDDEN);
 
-    const payload = {id: findUser.userid, email: findUser.email,rol: findUser.role};
+    const payload = {userid: findUser.userid, email: findUser.email, role: findUser.role};
     
     const token = await this.jwtService.sign(payload);
     const data = {
+      payload,
       token
     };
 
