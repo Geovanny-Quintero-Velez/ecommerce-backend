@@ -101,7 +101,6 @@ export class OrderService {
       .innerJoin('product', 'p', 'od.productid = p.productid')
       .where('o.orderid = :orderId', { orderId })
       .orderBy('p.name');
-  
     const result = await query.getRawMany();
     if (!result) {
       throw new NotFoundException(`Order summary for ID ${orderId} not found`);

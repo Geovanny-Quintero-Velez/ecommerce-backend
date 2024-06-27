@@ -6,7 +6,7 @@ export class CreateCategoryDto {
 
   @IsUUID()
   @IsOptional()
-  categoryId?: string;
+  categoryid?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -18,10 +18,10 @@ export class CreateCategoryDto {
 
   @Type(() => Date)
   @IsOptional()
-  createdAt?: Date;
+  createdat?: Date;
 
   @Type(() => Date)
   @IsOptional()
-  deletedAt?: Date;
+  deletedat?: Date;
 
 }

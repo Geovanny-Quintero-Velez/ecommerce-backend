@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 export class CreateProductKeywordDto {
     @IsUUID()
     @IsNotEmpty()
-    productId: string;
+    productid: string;
   
     @IsString()
     @IsNotEmpty()

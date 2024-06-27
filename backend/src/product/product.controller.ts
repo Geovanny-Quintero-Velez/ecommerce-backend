@@ -1,29 +1,49 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Roles } from 'src/decorator/rol.decorator';
+import { Role } from 'src/user/Role/role.enum';
 
 @Controller('product')
 @ApiTags("Product")
 export class ProductController {
-  constructor(private readonly productService: ProductService,
-              
+  constructor(private readonly productService: ProductService,      
   ) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN])
+  @ApiBearerAuth()
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   async create(@Body() createProductDto: CreateProductDto) {
     return this.productService.create(createProductDto);
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   async findOne(@Param("id", ParseUUIDPipe) id:string) {
     return this.productService.findOne(id);
   }
 
+  @Get('allinfo/:id')
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  async find(@Param("id", ParseUUIDPipe) id:string) {
+    return this.productService.findProductSummary(id);
+  }
+
   @Get('category/:id')
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   async findProductsByCategory(@Param("id", ParseUUIDPipe) id:string) {
     return this.productService.findByCategory(id);
@@ -31,19 +51,27 @@ export class ProductController {
 
   @Get()
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
   findAll() {
     return this.productService.findAll();
   }
 
-
   @Patch(':id')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN])
+  @ApiBearerAuth()
   update(@Param("id", ParseUUIDPipe) id:string, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(+id, updateProductDto);
   }
 
   @Delete(':id')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN])
+  @ApiBearerAuth()
   remove(@Param("id", ParseUUIDPipe) id:string) {
     return this.productService.remove(+id);
   }

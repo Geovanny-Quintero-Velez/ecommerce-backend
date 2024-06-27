@@ -24,6 +24,9 @@ export class UserController {
   }
   
   @Get()
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
   findAll() {
     return this.userService.findAll();
   }

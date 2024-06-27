@@ -29,7 +29,7 @@ export class ProductCategoryService {
   }
 
   async findOne(productid: string, categoryid: string): Promise<ProductCategory> {
-    const productCategory = await this.productCategoryRepository.findOne({ where: { productid, categoryid }, relations: ['product', 'category'] });
+    const productCategory = await this.productCategoryRepository.findOne({ where: { productid, categoryid }});
     if (!productCategory) {
       throw new NotFoundException('ProductCategory not found');
     }
@@ -37,7 +37,7 @@ export class ProductCategoryService {
   }
 
   async findCategory( categoryid: string): Promise<ProductCategory[]> {
-    const productCategory = await this.productCategoryRepository.find({ where: {  categoryid }, relations: ['product', 'category'] });
+    const productCategory = await this.productCategoryRepository.find({ where: {  categoryid }});
     if (!productCategory) {
       throw new NotFoundException('ProductCategory not found');
     }

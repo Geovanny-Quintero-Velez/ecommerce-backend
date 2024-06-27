@@ -36,6 +36,11 @@ export class ReviewService {
     return review;
   }
 
+  async findByProduct(id: string): Promise<Review[]> {
+    const review = await this.reviewRepository.find({ where: { productid: id } });
+    return review;
+  }
+
   async findAll(): Promise<Review[]> {
     return this.reviewRepository.find();
   }

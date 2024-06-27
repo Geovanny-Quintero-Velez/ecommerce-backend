@@ -6,13 +6,15 @@ import { Product } from './entities/product.entity';
 import {v4 as uuid} from  'uuid';
 import { Repository } from 'typeorm';
 import { ProductCategoryService } from 'src/product-category/product-category.service';
+import { ReviewService } from 'src/review/review.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
-    private readonly productCategoryService:ProductCategoryService
+    private readonly productCategoryService:ProductCategoryService,
+    private readonly reviewsService:ReviewService
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
@@ -41,6 +43,48 @@ export class ProductService {
   async findAll() {
     return await this.productsRepository.find();
   }
+
+  async findProductSummary(productId: string): Promise<any> {
+    const query = this.productsRepository.createQueryBuilder('p')
+    .select([
+      'p.productid as productid',
+      'p.name as name',
+      'p.description as description',
+      'p.price as price',
+      'p.stock as stock',
+      'p.discount as discount',
+      'p.createdat as createdat',
+      'p.deletedat as deletedat',
+      'p.lastmodifiedby as lastmodifiedby',
+      'p.lastmodifiedat as lastmodifiedat',
+    ])
+    .addSelect('array_agg(DISTINCT pi.img) as imageurls')
+    .addSelect('array_agg(DISTINCT pk.keyword) as keywords')
+    .innerJoin('productcategory', 'pd', 'p.productid = pd.productid')
+    .innerJoin('productimage', 'pi', 'p.productid = pi.productid')
+    .innerJoin('productkeyword', 'pk', 'p.productid = pk.productid')
+    .where('p.productid = :productId', { productId })
+    .groupBy('p.productid')
+    .orderBy('p.name');
+
+    const resultQ = await query.getRawMany()
+    let result={
+      ...resultQ.pop(),
+      reviewscount:0,
+      rating:0
+    }
+    console.log(result)
+    const reviews=await this.reviewsService.findByProduct(productId)
+    result.reviewscount=reviews.length
+    let rating=0
+    for (let i=0;i<reviews.length;i++){
+      const review=reviews[i]
+      rating+=review.rate
+    }
+    rating=rating/(reviews.length|1)
+    result.rating=rating
+    return result;
+    }
 
 
   async update(id: uuid, updateProductDto: UpdateProductDto) {

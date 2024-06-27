@@ -39,6 +39,9 @@ export class UserService {
   }
 
   async update(id: uuid, updateUserDto: UpdateUserDto) {
+    if(!updateUserDto.userid){
+      updateUserDto.userid=id
+    }
     const user = await this.usersRepository.preload({
       ...updateUserDto
     })
