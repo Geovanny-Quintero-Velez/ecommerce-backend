@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param, Delete, ParseUUIDPipe, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete, ParseUUIDPipe, Post, UseGuards } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -12,7 +12,7 @@ import { Roles } from 'src/decorator/rol.decorator';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Patch()
+  @Post()
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @UseGuards(JwtAuthGuard, RolAuthGuard)
@@ -40,7 +40,7 @@ export class CategoryController {
     return this.categoryService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @Roles([Role.ADMIN])
