@@ -4,6 +4,9 @@ import { OrderService } from 'src/order/order.service';
 import { OrderDetailService } from 'src/order-detail/order-detail.service';
 import { CreateOrderDetailDto } from 'src/order-detail/dto/create-order-detail.dto';
 import {v4 as uuid} from  'uuid';
+import Big from 'big.js';
+import { OrderDetail } from 'src/order-detail/entities/order-detail.entity';
+import { ProductService } from 'src/product/product.service';
 
 @Injectable()
 export class ShoppingCartService {
@@ -11,6 +14,7 @@ export class ShoppingCartService {
   constructor(
     private readonly orderService: OrderService,
     private readonly orderDetailService: OrderDetailService,
+    private readonly productService:ProductService
   ) {}
 
   async update( updateShoppingCartDto: UpdateShoppingCartDto) {
@@ -22,13 +26,21 @@ export class ShoppingCartService {
     const items=updateShoppingCartDto.items
     for(let i=0;i<items.length;i++){
       const item=items[i]
+      const product=await this.productService.findOne(item.productid)
+      let orderDetail:OrderDetail=new OrderDetail()
+      orderDetail.setPrice(-product.price)
+      orderDetail.multiply(product.discount)
+      orderDetail.divide(100)
+      orderDetail.add(product.price)
+      orderDetail.multiply(item.quantity)
+      item.price=orderDetail.getPrice()
       const itemBeforeUpdate= await this.orderDetailService.isReplicated(item.orderid,item.productid)
       if(!itemBeforeUpdate){
         const orderD:CreateOrderDetailDto={
           orderid: item.orderid,
           productid: item.productid,
           quantity: item.quantity,
-          price: +item.price
+          price: +orderDetail.getPrice()
         }
         await this.orderDetailService.create(orderD)
         order.add(orderD.price)
@@ -36,7 +48,7 @@ export class ShoppingCartService {
       }else {
         await this.orderDetailService.update(itemBeforeUpdate.orderdetailid,item)
         order.subtract(itemBeforeUpdate.price)
-        order.add(item.price)
+        order.add(orderDetail.getPrice())
         response=await this.orderService.updateOrder(order.orderid,order)
       }
     }

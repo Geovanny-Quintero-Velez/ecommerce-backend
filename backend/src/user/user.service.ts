@@ -5,17 +5,29 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {v4 as uuid} from  'uuid';
 import { User } from './entities/user.entity';
+import { OrderService } from 'src/order/order.service';
 
 @Injectable()
 export class UserService {
 
-  constructor(@InjectRepository(User) private usersRepository: Repository<User>){
+  constructor(@InjectRepository(User) 
+  private readonly usersRepository: Repository<User>,
+  private readonly orderService:OrderService
+){
 
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = this.usersRepository.create(createUserDto);
-    return await this.usersRepository.save(user);
+    const user =  this.usersRepository.create(createUserDto);
+    const response=await this.usersRepository.save(user);
+    const newShoppingCart={
+      userid: user.userid,
+      price: 0,
+      status: "ShoppingCart",
+      addressid: null
+    }
+    await this.orderService.create(newShoppingCart)
+    return response
   }
 
   async findOne(id: string): Promise<User> {
