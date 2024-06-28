@@ -20,6 +20,7 @@ export class ProductImageService {
   async update(@Param("id", ParseUUIDPipe) id:string, updateProductImageDto: UpdateProductImageDto): Promise<ProductImage> {
     
     const productImage = await this.productImageRepository.preload({
+      imageid:id,
       ...updateProductImageDto,
     });
     

@@ -61,7 +61,7 @@ export class WishListService {
       'p.lastmodifiedby as lastmodifiedby',
       'p.lastmodifiedat as lastmodifiedat',
     ])
-    .addSelect('array_agg(DISTINCT pi.img) as imageurls')
+    .addSelect("array_agg(DISTINCT jsonb_build_object('img', pi.img, 'imageid', pi.imageid)) as images")
     .addSelect('array_agg(DISTINCT pk.keyword) as keywords')
     .addSelect('array_agg(DISTINCT c.name) as categories')
     .innerJoin('product', 'p', 'p.productid = w.productid')

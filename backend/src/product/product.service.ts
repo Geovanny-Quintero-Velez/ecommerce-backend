@@ -79,7 +79,7 @@ export class ProductService {
       'p.lastmodifiedby as lastmodifiedby',
       'p.lastmodifiedat as lastmodifiedat',
     ])
-    .addSelect('array_agg(DISTINCT pi.img) as imageurls')
+    .addSelect("array_agg(DISTINCT jsonb_build_object('img', pi.img, 'imageid', pi.imageid)) as image")
     .addSelect('array_agg(DISTINCT pk.keyword) as keywords')
     .addSelect('array_agg(DISTINCT c.name) as categories')
     .innerJoin('productcategory', 'pc', 'p.productid = pc.productid')
@@ -125,7 +125,7 @@ export class ProductService {
         'p.lastmodifiedby as lastmodifiedby',
         'p.lastmodifiedat as lastmodifiedat',
       ])
-      .addSelect('array_agg(DISTINCT pi.img) as imageurls')
+      .addSelect("array_agg(DISTINCT jsonb_build_object('img', pi.img, 'imageid', pi.imageid)) as image")
       .addSelect('array_agg(DISTINCT pk.keyword) as keywords')
       .addSelect('array_agg(DISTINCT c.name) as categories')
       .innerJoin('productcategory', 'pc', 'p.productid = pc.productid')
