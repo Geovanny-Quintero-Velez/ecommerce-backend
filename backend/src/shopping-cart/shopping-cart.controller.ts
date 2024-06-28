@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGu
 import { ShoppingCartService } from './shopping-cart.service';
 import { CreateShoppingCartDto } from './dto/create-shopping-cart.dto';
 import { UpdateShoppingCartDto } from './dto/update-shopping-cart.dto';
-import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/user/Role/role.enum';
 import { Roles } from 'src/decorator/rol.decorator';
@@ -17,6 +17,10 @@ export class ShoppingCartController {
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data'
+  })
   buy(@Param("id", ParseUUIDPipe) id: string) {
     return this.shoppingCartService.buy(id);
   }

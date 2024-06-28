@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGu
 import { ProductImageService } from './product-image.service';
 import { CreateProductImageDto } from './dto/create-product-image.dto';
 import { UpdateProductImageDto } from './dto/update-product-image.dto';
-import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/user/Role/role.enum';
 import { Roles } from 'src/decorator/rol.decorator';
@@ -18,6 +18,10 @@ export class ProductImageController {
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @Roles([Role.ADMIN])
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data'
+  })
   create(@Body() createProductImageDto: CreateProductImageDto) {
     return this.productImageService.create(createProductImageDto);
   }
@@ -38,6 +42,23 @@ export class ProductImageController {
   @ApiBearerAuth()
   findOne(@Param("id", ParseUUIDPipe) id:string) {
     return this.productImageService.findOne(id);
+  }
+  @Get('admin')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN])
+  @ApiBearerAuth()
+  findAllD() {
+    return this.productImageService.findAllD();
+  }
+
+  @Get('admin/:id')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN])
+  @ApiBearerAuth()
+  findOneD(@Param("id", ParseUUIDPipe) id:string) {
+    return this.productImageService.findOneD(id);
   }
 
   @Patch(':id')

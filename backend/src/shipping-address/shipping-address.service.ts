@@ -19,7 +19,7 @@ export class ShippingAddressService {
   }
 
   async findOne(id: string): Promise<ShippingAddress> {
-    const shippingAddress = await this.shippingAddressesRepository.findOne({ where: { addressid: id } });
+    const shippingAddress = await this.shippingAddressesRepository.findOne({ where: { addressid: id,deletedat: null  } });
     if (!shippingAddress) {
       throw new NotFoundException(`ShippingAddress with ID ${id} not found`);
     }
@@ -27,6 +27,18 @@ export class ShippingAddressService {
   }
 
   async findAll() {
+    return await this.shippingAddressesRepository.find({where:{deletedat: null }});
+  }
+
+  async findOneD(id: string): Promise<ShippingAddress> {
+    const shippingAddress = await this.shippingAddressesRepository.findOne({ where: { addressid: id } });
+    if (!shippingAddress) {
+      throw new NotFoundException(`ShippingAddress with ID ${id} not found`);
+    }
+    return shippingAddress;
+  }
+
+  async findAllD() {
     return await this.shippingAddressesRepository.find();
   }
 
@@ -42,7 +54,8 @@ export class ShippingAddressService {
   }
 
   async remove(id: uuid) {
-    const shipD=await this.findOne(id)
-    return await this.shippingAddressesRepository.remove(shipD);
+    let shipD=await this.findOne(id)
+    shipD.deletedat=new Date()
+    return await this.shippingAddressesRepository.save(shipD);
   }
 }

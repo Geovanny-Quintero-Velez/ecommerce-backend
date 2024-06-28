@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGu
 import { ShippingAddressService } from './shipping-address.service';
 import { CreateShippingAddressDto } from './dto/create-shipping-address.dto';
 import { UpdateShippingAddressDto } from './dto/update-shipping-address.dto';
-import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/user/Role/role.enum';
 import { Roles } from 'src/decorator/rol.decorator';
@@ -17,6 +17,10 @@ export class ShippingAddressController {
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data'
+  })
   create(@Body() createShippingAddressDto: CreateShippingAddressDto) {
     return this.shippingAddressService.create(createShippingAddressDto);
   }
@@ -37,6 +41,25 @@ export class ShippingAddressController {
   @ApiBearerAuth()
   findOne(@Param("id", ParseUUIDPipe) id:string) {
     return this.shippingAddressService.findOne(id);
+  }
+
+  
+  @Get('admin')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN])
+  @ApiBearerAuth()
+  findAllD() {
+    return this.shippingAddressService.findAllD();
+  }
+
+  @Get(':id')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  findOneD(@Param("id", ParseUUIDPipe) id:string) {
+    return this.shippingAddressService.findOneD(id);
   }
 
   @Patch(':id')

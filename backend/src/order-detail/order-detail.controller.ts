@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGu
 import { OrderDetailService } from './order-detail.service';
 import { CreateOrderDetailDto } from './dto/create-order-detail.dto';
 import { UpdateOrderDetailDto } from './dto/update-order-detail.dto';
-import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/user/Role/role.enum';
 import { Roles } from 'src/decorator/rol.decorator';
@@ -17,6 +17,10 @@ export class OrderDetailController {
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data'
+  })
   create(@Body() createOrderDetailDto: CreateOrderDetailDto) {
     return this.orderDetailService.create(createOrderDetailDto);
   }

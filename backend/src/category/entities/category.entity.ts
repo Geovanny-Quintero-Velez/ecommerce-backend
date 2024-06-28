@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, DeleteDateColumn } from 'typeorm';
 
-@Entity('Category')
+@Entity('category')
 export class Category {
   @PrimaryGeneratedColumn('uuid')
-  categoryId: string;
+  categoryid: string;
 
   @Column({ type: 'varchar', length: 100 })
   name: string;
@@ -12,8 +12,8 @@ export class Category {
   description?: string;
 
   @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  createdat: Date;
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
-  deletedAt?: Date;
+  deletedat?: Date;
 }

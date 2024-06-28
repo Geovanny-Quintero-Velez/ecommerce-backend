@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGu
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
-import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Roles } from 'src/decorator/rol.decorator';
 import { Role } from 'src/user/Role/role.enum';
 import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -17,6 +17,10 @@ export class ReviewController {
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data'
+  })
   create(@Body() createReviewDto: CreateReviewDto) {
     return this.reviewService.create(createReviewDto);
   }
@@ -37,6 +41,25 @@ export class ReviewController {
   @ApiBearerAuth()
   findOne(@Param("id", ParseUUIDPipe) id:string) {
     return this.reviewService.findOne(id);
+  }
+
+
+  @Get('admin')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  findAllD() {
+    return this.reviewService.findAllD();
+  }
+
+  @Get('admin/:id')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  findOneD(@Param("id", ParseUUIDPipe) id:string) {
+    return this.reviewService.findOneD(id);
   }
 
   @Patch(':id')

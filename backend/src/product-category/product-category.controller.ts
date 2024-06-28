@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGu
 import { ProductCategoryService } from './product-category.service';
 import { CreateProductCategoryDto } from './dto/create-product-category.dto';
 import { UpdateProductCategoryDto } from './dto/update-product-category.dto';
-import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/user/Role/role.enum';
 import { Roles } from 'src/decorator/rol.decorator';
@@ -17,6 +17,10 @@ export class ProductCategoryController {
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @Roles([Role.ADMIN])
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data'
+  })
   create(@Body() createProductCategoryDto: CreateProductCategoryDto) {
     return this.productCategoryService.create(createProductCategoryDto);
   }

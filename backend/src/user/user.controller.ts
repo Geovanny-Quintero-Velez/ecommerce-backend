@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from './Role/role.enum';
 import { Roles } from 'src/decorator/rol.decorator';
@@ -14,6 +14,10 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data'
+  })
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
   }
@@ -24,6 +28,9 @@ export class UserController {
   }
   
   @Get()
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
   findAll() {
     return this.userService.findAll();
   }

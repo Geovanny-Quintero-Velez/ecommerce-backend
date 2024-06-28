@@ -5,7 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const PATH_DEFAULT=""
+  const PATH_DEFAULT="api/v1"
   app.setGlobalPrefix(PATH_DEFAULT);
 
   app.useGlobalPipes(
@@ -16,10 +16,11 @@ async function bootstrap() {
   );
 
   app.enableCors();
+  console.log(new Date())
 
   const config = new DocumentBuilder()
-    .setTitle('E-COMERCE example')
-    .setDescription('The E-COMERCE API ')
+    .setTitle('Fooddy´s API')
+    .setDescription('The E-COMERCE Fooddy´s API to manage users and products')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

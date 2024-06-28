@@ -20,7 +20,7 @@ export class ShipmentService {
   }
 
   async findOne(id: string): Promise<Shipment> {
-    const shipment = await this.shipmentsRepository.findOne({ where: { shipmentid: id } });
+    const shipment = await this.shipmentsRepository.findOne({ where: { shipmentid: id,deletedat: null  } });
     if (!shipment) {
       throw new NotFoundException(`Shipment with ID ${id} not found`);
     }
@@ -28,7 +28,19 @@ export class ShipmentService {
   }
 
   async findAll() {
-    return await this.shipmentsRepository.find();
+    return await this.shipmentsRepository.find({where:{deletedat: null }});
+  }
+
+  async findOneD(id: string): Promise<Shipment> {
+    const shipment = await this.shipmentsRepository.findOne({ where: { shipmentid: id } });
+    if (!shipment) {
+      throw new NotFoundException(`Shipment with ID ${id} not found`);
+    }
+    return shipment;
+  }
+
+  async findAllD() {
+    return await this.shipmentsRepository.find({});
   }
 
 
@@ -43,7 +55,8 @@ export class ShipmentService {
   }
 
   async remove(id: uuid) {
-    const shipD=await this.findOne(id)
-    return await this.shipmentsRepository.remove(shipD);
+    let shipD=await this.findOne(id)
+    shipD.deletedat=new Date()
+    return await this.shipmentsRepository.save(shipD);
   }
 }

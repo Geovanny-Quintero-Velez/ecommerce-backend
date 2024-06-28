@@ -29,8 +29,20 @@ export class ProductKeywordService {
     return this.productKeywordRepository.save(productKeyword);
   }
 
+  async findOneD(id: string): Promise<ProductKeyword> {
+    const productKeyword = await this.productKeywordRepository.findOne({ where: { productkeywordid: id  } });
+    if (!productKeyword) {
+      throw new NotFoundException('ProductKeyword not found');
+    }
+    return productKeyword;
+  }
+
+  async findAllD(): Promise<ProductKeyword[]> {
+    return this.productKeywordRepository.find({});
+  }
+
   async findOne(id: string): Promise<ProductKeyword> {
-    const productKeyword = await this.productKeywordRepository.findOne({ where: { productkeywordid: id } });
+    const productKeyword = await this.productKeywordRepository.findOne({ where: { productkeywordid: id,deletedat: null  } });
     if (!productKeyword) {
       throw new NotFoundException('ProductKeyword not found');
     }
@@ -38,13 +50,12 @@ export class ProductKeywordService {
   }
 
   async findAll(): Promise<ProductKeyword[]> {
-    return this.productKeywordRepository.find();
+    return this.productKeywordRepository.find({where:{deletedat: null }});
   }
 
-  async remove(id: string): Promise<void> {
-    const result = await this.productKeywordRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException('ProductKeyword not found');
-    }
+  async remove(id: string): Promise<ProductKeyword> {
+    let result = await this.findOne(id);
+    result.deletedat=new Date()
+    return this.productKeywordRepository.save(result)
   }
 }

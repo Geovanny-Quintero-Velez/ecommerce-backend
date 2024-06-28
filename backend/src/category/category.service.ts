@@ -19,12 +19,24 @@ export class CategoryService {
     return await this.categoriesRepository.save(category);
   }
 
-  async findAll() {
+  async findAllD() {
     return await this.categoriesRepository.find();
   }
 
+  async findOneD(id: uuid) {
+    const category = await this.categoriesRepository.findOne({ where: { categoryid: id } });
+    if(!category){
+        throw new NotFoundException("Category not found")
+    }
+    return category;
+  }
+
+  async findAll() {
+    return await this.categoriesRepository.find({ where: { deletedat: null  }});
+  }
+
   async findOne(id: uuid) {
-    const category = await this.categoriesRepository.findOne({ where: { categoryId: id } });
+    const category = await this.categoriesRepository.findOne({ where: { categoryid: id , deletedat: null} });
     if(!category){
         throw new NotFoundException("Category not found")
     }

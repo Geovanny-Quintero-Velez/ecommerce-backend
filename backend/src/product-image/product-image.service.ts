@@ -29,22 +29,33 @@ export class ProductImageService {
     return this.productImageRepository.save(productImage);
   }
 
-  async findAll(){
-    return await this.productImageRepository.find({})
+  async findAllD(){
+    return await this.productImageRepository.find({ })
   }
 
-  async findOne(@Param("id", ParseUUIDPipe) id:string): Promise<ProductImage> {
-    const productImage = await this.productImageRepository.findOne({ where: { imageid: id } });
+  async findOneD(@Param("id", ParseUUIDPipe) id:string): Promise<ProductImage> {
+    const productImage = await this.productImageRepository.findOne({ where: { imageid: id  } });
     if (!productImage) {
       throw new NotFoundException('ProductImage not found');
     }
     return productImage;
   }
 
-  async remove(@Param("id", ParseUUIDPipe) id:string): Promise<void> {
-    const result = await this.productImageRepository.delete(id);
-    if (result.affected === 0) {
+  async findAll(){
+    return await this.productImageRepository.find({ where: { deletedat: null  } })
+  }
+
+  async findOne(@Param("id", ParseUUIDPipe) id:string): Promise<ProductImage> {
+    const productImage = await this.productImageRepository.findOne({ where: { imageid: id,deletedat: null  } });
+    if (!productImage) {
       throw new NotFoundException('ProductImage not found');
     }
+    return productImage;
+  }
+
+  async remove(@Param("id", ParseUUIDPipe) id:string): Promise<ProductImage> {
+    let result = await this.findOne(id);
+    result.deletedat=new Date()
+    return this.productImageRepository.save(result)
   }
 }
