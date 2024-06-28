@@ -6,6 +6,7 @@ import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
 import {v4 as uuid} from  'uuid';
 import { OrderDetailService } from 'src/order-detail/order-detail.service';
+import { OrderDetail } from 'src/order-detail/entities/order-detail.entity';
 
 @Injectable()
 export class OrderService {
@@ -13,7 +14,11 @@ export class OrderService {
   constructor(
     @InjectRepository(Order)
     private ordersRepository: Repository<Order>,
-    private readonly orderDetailService:OrderDetailService
+    private readonly orderDetailService:OrderDetailService,
+    @InjectRepository(OrderDetail)
+    private orderDetailsRepository: Repository<OrderDetail>,
+    
+
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
@@ -58,12 +63,66 @@ export class OrderService {
     return order;
   }
 
-  async findByUserOrder(id: string) {
-    const order = await this.ordersRepository.findOne({ where: { userid: id , deletedat: null,status:"ShoppingCart"} });
+  async findByUserOrder(userId: string) {
+    const order = await this.ordersRepository.findOne({ where: { userid: userId , deletedat: null,status:"ShoppingCart"} });
+    let orderId=order.orderid
     if (!order) {
-      throw new NotFoundException(`Order with ID ${id} not found`);
+      throw new NotFoundException(`Order with ID ${userId} not found`);
     }
-    const orderDetails=await this.orderDetailService.findByOrder(order.orderid)
+    const query = this.orderDetailsRepository.createQueryBuilder('o')
+    .select([
+      'o.orderdetailid as orderdetailid',
+      'o.orderid as orderid',
+      'o.productid as productid',
+      'o.price as price',
+      'o.quantity as quantity',
+      'o.createdat as createdat',
+      'o.deletedat as deletedat',
+      'p.productid as product_productid',
+      'p.name as product_name',
+      'p.description as product_description',
+      'p.price as product_price',
+      'p.stock as product_stock',
+      'p.discount as product_discount',
+      'p.createdat as product_createdat',
+      'p.deletedat as product_deletedat',
+      'p.lastmodifiedby as product_lastmodifiedby',
+      'p.lastmodifiedat as product_lastmodifiedat',
+    ])
+    .addSelect("array_agg(DISTINCT jsonb_build_object('img', pi.img, 'imageid', pi.imageid)) as product_images")
+    .addSelect("array_agg(DISTINCT jsonb_build_object('category', c.name, 'categoryid', c.categoryid)) as product_categories")
+    .innerJoin('product', 'p', 'p.productid = o.productid')
+    .innerJoin('productcategory', 'pc', 'p.productid = pc.productid')
+    .innerJoin('productimage', 'pi', 'p.productid = pi.productid')
+    .innerJoin('category', 'c', 'pc.categoryid = c.categoryid')
+    .where('o.orderid = :orderId', { orderId })
+    .groupBy('o.orderdetailid, p.productid')
+    .orderBy('p.name');
+
+  const result = await query.getRawMany();
+  const orderDetails = result.map(row => ({
+    orderdetailid: row.orderdetailid,
+    orderid: row.orderid,
+    productid: row.productid,
+    price: row.price,
+    quantity: row.quantity,
+    createdat: row.createdat,
+    deletedat: row.deletedat,
+    product: {
+      productid: row.product_productid,
+      name: row.product_name,
+      description: row.product_description,
+      price: row.product_price,
+      stock: row.product_stock,
+      discount: row.product_discount,
+      createdat: row.product_createdat,
+      deletedat: row.product_deletedat,
+      lastmodifiedby: row.product_lastmodifiedby,
+      lastmodifiedat: row.product_lastmodifiedat,
+      images: row.product_images ? row.product_images.filter(Boolean) : [],
+      categories: row.product_categories ? row.product_categories.filter(Boolean) : []
+    }
+  }));
     return {order,orderDetails};
   }
 
