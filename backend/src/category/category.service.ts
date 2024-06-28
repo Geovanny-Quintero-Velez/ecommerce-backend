@@ -45,7 +45,6 @@ export class CategoryService {
 
   async update(id: uuid, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.categoriesRepository.preload({
-      
       ...updateCategoryDto
     })
     if(!category){

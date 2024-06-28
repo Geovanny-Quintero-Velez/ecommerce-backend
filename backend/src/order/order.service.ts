@@ -96,8 +96,10 @@ export class OrderService {
   }
 
   async remove(id: uuid) {
-    const order=await this.findOne(id)
-    return await this.ordersRepository.remove(order);
+    let order=await this.findOne(id)
+    order.deletedat=new Date()
+
+    return await this.ordersRepository.save(order);
   }
 
   async getOrderSummary(orderId: string): Promise<any> {
