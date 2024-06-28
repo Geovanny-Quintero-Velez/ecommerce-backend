@@ -52,6 +52,18 @@ export class OrderController {
     return this.orderService.findOneDeleteds(id);
   }
 
+  @Get('user/:id')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN])
+  @ApiBearerAuth()
+  findOneByUser(@Param("id", ParseUUIDPipe) id:string) {
+    return this.orderService.findByUserOrder(id);
+  }
+  
+
+
+
   @Get(':id')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)

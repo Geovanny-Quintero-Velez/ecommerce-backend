@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
 import {v4 as uuid} from  'uuid';
+import { OrderDetailService } from 'src/order-detail/order-detail.service';
 
 @Injectable()
 export class OrderService {
@@ -12,6 +13,7 @@ export class OrderService {
   constructor(
     @InjectRepository(Order)
     private ordersRepository: Repository<Order>,
+    private readonly orderDetailService:OrderDetailService
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
@@ -54,6 +56,15 @@ export class OrderService {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
     return order;
+  }
+
+  async findByUserOrder(id: string) {
+    const order = await this.ordersRepository.findOne({ where: { userid: id , deletedat: null,status:"ShoppingCart"} });
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    }
+    const orderDetails=await this.orderDetailService.findByOrder(order.orderid)
+    return {order,orderDetails};
   }
 
   async findAll() {
