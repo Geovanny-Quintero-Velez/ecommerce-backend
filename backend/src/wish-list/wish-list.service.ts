@@ -15,6 +15,7 @@ export class WishListService {
   ) {}
 
   async create(createWishListDto: CreateWishListDto): Promise<WishList> {
+    
     const wishList = this.wishListRepository.create(createWishListDto);
     return this.wishListRepository.save(wishList);
   }

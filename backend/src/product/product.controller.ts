@@ -99,7 +99,7 @@ export class ProductController {
   @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
   findAll() {
-    return this.productService.findAll();
+    return this.productService.findAllProductSummary();
   }
 
   @Patch(':id')

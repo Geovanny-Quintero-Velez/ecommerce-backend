@@ -63,6 +63,8 @@ export class ProductService {
     return await this.productsRepository.find({});
   }
 
+  
+
   async findProductSummary(productId: string): Promise<any> {
     const query = this.productsRepository.createQueryBuilder('p')
     .select([
@@ -108,6 +110,58 @@ export class ProductService {
     result.rating=rating
     return result;
     }
+  
+    async findAllProductSummary() {
+      const query = this.productsRepository.createQueryBuilder('p')
+      .select([
+        'p.productid as productid',
+        'p.name as name',
+        'p.description as description',
+        'p.price as price',
+        'p.stock as stock',
+        'p.discount as discount',
+        'p.createdat as createdat',
+        'p.deletedat as deletedat',
+        'p.lastmodifiedby as lastmodifiedby',
+        'p.lastmodifiedat as lastmodifiedat',
+      ])
+      .addSelect('array_agg(DISTINCT pi.img) as imageurls')
+      .addSelect('array_agg(DISTINCT pk.keyword) as keywords')
+      .addSelect('array_agg(DISTINCT c.name) as categories')
+      .innerJoin('productcategory', 'pc', 'p.productid = pc.productid')
+      .innerJoin('productimage', 'pi', 'p.productid = pi.productid')
+      .innerJoin('productkeyword', 'pk', 'p.productid = pk.productid')
+      .innerJoin('category', 'c', 'pc.categoryid = c.categoryid')
+      .groupBy('p.productid')
+      .orderBy('p.name');
+      const resultQ = await query.getRawMany()
+      let result=[]
+      for(let i=0;i<resultQ.length;i++){
+        let product={
+          ...resultQ[i],
+          reviewscount:0,
+          rating:0
+        }
+    
+        if(product.deletedat || !product.productid){
+          
+        }else{
+          const reviews=await this.reviewsService.findByProduct(product.productid)
+          product.reviewscount=reviews.length
+          let rating=0
+          for (let i=0;i<reviews.length;i++){
+            const review=reviews[i]
+            rating+=review.rate
+          }
+          rating=rating/(reviews.length|1)
+          product.rating=rating
+          result.push(product)
+      }
+
+      }
+      
+      return result;
+      }
 
 
   async update(id: uuid, updateProductDto: UpdateProductDto) {
