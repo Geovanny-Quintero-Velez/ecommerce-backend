@@ -35,22 +35,13 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
-  @Get(':id')
+  @Get('admin')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
-  findOne(@Param("id", ParseUUIDPipe) id:string) {
-    return this.categoryService.findOne(id);
-  }
-
-  @Get('admin')
-  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
-  @UseGuards(JwtAuthGuard, RolAuthGuard)
-  @Roles([Role.ADMIN])
-  @ApiBearerAuth()
-  findAllD() {
-    return this.categoryService.findAllD();
+  findAllA() {
+    return this.categoryService.findAll();
   }
 
   @Get('admin/:id')
@@ -61,6 +52,19 @@ export class CategoryController {
   findOneD(@Param("id", ParseUUIDPipe) id:string) {
     return this.categoryService.findOneD(id);
   }
+
+  @Get(':id')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  findOne(@Param("id", ParseUUIDPipe) id:string) {
+    return this.categoryService.findOne(id);
+  }
+
+
+
+
 
   @Patch(':id')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})

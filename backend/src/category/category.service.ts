@@ -20,7 +20,7 @@ export class CategoryService {
   }
 
   async findAllD() {
-    return await this.categoriesRepository.find({});
+    return await this.categoriesRepository.find();
   }
 
   async findOneD(id: uuid) {

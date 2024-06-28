@@ -22,6 +22,28 @@ export class ProductController {
     return this.productService.create(createProductDto);
   }
 
+  @Get('admin')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  findAllA() {
+    return this.productService.findAllD();
+  }
+
+  @Get('/admin/:id')
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  async findOneD(@Param("id", ParseUUIDPipe) id:string) {
+    return this.productService.findOneD(id);
+  }
+
+
+
+
+
   @Get(':id')
   @UseGuards(JwtAuthGuard, RolAuthGuard)
   @Roles([Role.ADMIN,Role.USER])

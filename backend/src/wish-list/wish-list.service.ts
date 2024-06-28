@@ -1,26 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateWishListDto } from './dto/create-wish-list.dto';
 import { UpdateWishListDto } from './dto/update-wish-list.dto';
+import { WishList } from './entities/wish-list.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class WishListService {
-  create(createWishListDto: CreateWishListDto) {
-    return 'This action adds a new wishList';
+  constructor(
+    @InjectRepository(WishList)
+    private wishListRepository: Repository<WishList>,
+  ) {}
+
+  async create(createWishListDto: CreateWishListDto): Promise<WishList> {
+    const wishList = this.wishListRepository.create(createWishListDto);
+    return this.wishListRepository.save(wishList);
   }
 
-  findAll() {
-    return `This action returns all wishList`;
+  async update(id: string, updateWishListDto: UpdateWishListDto): Promise<WishList> {
+    const wishList = await this.wishListRepository.preload({
+      wishlistid: id,
+      ...updateWishListDto,
+    });
+    if (!wishList) {
+      throw new NotFoundException('WishList not found');
+    }
+    return this.wishListRepository.save(wishList);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} wishList`;
+  async findOne(id: string): Promise<WishList> {
+    const wishList = await this.wishListRepository.findOne({ where: { wishlistid: id, deletedat:null } });
+    if (!wishList) {
+      throw new NotFoundException('WishList not found');
+    }
+    return wishList;
   }
 
-  update(id: number, updateWishListDto: UpdateWishListDto) {
-    return `This action updates a #${id} wishList`;
+  async findAll(): Promise<WishList[]> {
+    return this.wishListRepository.find({where:{deletedat:null}});
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} wishList`;
+  async findOneD(id: string): Promise<WishList> {
+    const wishList = await this.wishListRepository.findOne({ where: { wishlistid: id } });
+    if (!wishList) {
+      throw new NotFoundException('WishList not found');
+    }
+    return wishList;
+  }
+
+  async findAllD(): Promise<WishList[]> {
+    return this.wishListRepository.find({});
+  }
+
+  async remove(id: string): Promise<WishList> {
+    let result = await this.findOne(id);
+    result.deletedat=new Date()
+    return this.wishListRepository.save(result)
   }
 }

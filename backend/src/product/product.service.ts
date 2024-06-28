@@ -49,6 +49,20 @@ export class ProductService {
     });
   }
 
+  async findOneD(id: string): Promise<Product> {
+    
+    const product = await this.productsRepository.findOne({ where: { productid: id } });
+    console.log(product)
+    if (!product) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+    return product;
+  }
+
+  async findAllD() {
+    return await this.productsRepository.find({});
+  }
+
   async findProductSummary(productId: string): Promise<any> {
     const query = this.productsRepository.createQueryBuilder('p')
     .select([
