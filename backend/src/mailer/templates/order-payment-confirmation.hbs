@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Payment Confirmation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #eaeaea;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+    .header {
+      text-align: center;
+      padding: 10px;
+      border-bottom: 1px solid #eaeaea;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #333;
+    }
+    .content {
+      padding: 20px;
+    }
+    .content p {
+      margin: 0 0 10px;
+    }
+    .footer {
+      text-align: center;
+      padding: 10px;
+      border-top: 1px solid #eaeaea;
+      font-size: 12px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Payment Confirmation</h1>
+    </div>
+    <div class="content">
+      <p>Dear {{username}},</p>
+      <p>Thank you for your payment. We have received your order and payment successfully.</p>
+      <p><strong>Order ID:</strong> {{orderid}}</p>
+      <p><strong>Amount Paid:</strong> ${{price}}</p>
+      <p>If you have any questions or concerns, please contact our support team.</p>
+      <p>Thank you for choosing our service!</p>
+    </div>
+    <div class="footer">
+      <p>&copy; 2024 Your Company. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>
