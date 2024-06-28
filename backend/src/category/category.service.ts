@@ -45,6 +45,7 @@ export class CategoryService {
 
   async update(id: uuid, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.categoriesRepository.preload({
+      
       ...updateCategoryDto
     })
     if(!category){
@@ -54,7 +55,7 @@ export class CategoryService {
   }
 
   async remove(id: uuid) {
-    
+
     let category=await this.findOne(id)
     category.deletedat=new Date()
     return await this.categoriesRepository.save(category);
