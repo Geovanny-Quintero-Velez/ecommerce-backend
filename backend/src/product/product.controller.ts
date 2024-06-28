@@ -54,9 +54,6 @@ export class ProductController {
   }
 
   @Get('allinfo/:id')
-  @UseGuards(JwtAuthGuard, RolAuthGuard)
-  @Roles([Role.ADMIN,Role.USER])
-  @ApiBearerAuth()
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @ApiResponse({
     status: 200,
@@ -94,10 +91,6 @@ export class ProductController {
   }
 
   @Get()
-  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
-  @UseGuards(JwtAuthGuard, RolAuthGuard)
-  @Roles([Role.ADMIN,Role.USER])
-  @ApiBearerAuth()
   findAll() {
     return this.productService.findAllProductSummary();
   }
