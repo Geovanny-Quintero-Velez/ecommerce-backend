@@ -54,6 +54,7 @@ export class CategoryService {
   }
 
   async remove(id: uuid) {
+    
     let category=await this.findOne(id)
     category.deletedat=new Date()
     return await this.categoriesRepository.save(category);
