@@ -9,6 +9,8 @@ import { ConfigService } from '@nestjs/config';
 import { Order } from 'src/order/entities/order.entity';
 import { User } from 'src/user/entities/user.entity';
 import { MailService } from 'src/mailer/mail.service';
+import { OrderService } from 'src/order/order.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class PaymentService {
@@ -17,10 +19,8 @@ export class PaymentService {
     @InjectRepository(Payment)
     private paymentRepository: Repository<Payment>,
     private configService: ConfigService,
-    @InjectRepository(Order)
-    private orderRepository: Repository<Order>,
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private orderService: OrderService,
+    private userService: UserService,
     private mailService: MailService
   ) {
     this.gateway = new braintree.BraintreeGateway({
@@ -56,10 +56,14 @@ export class PaymentService {
           apiresponse: result,
         })
 
-        let order = this.orderRepository.findOne({ where: { orderid: payment.orderid } });
-        let user = this.userRepository.findOne({ where: { userid: (await order).userid } });
+        let order = await this.orderService.findOne(payment.orderid);
+        let user = await this.userService.findOne((await order).userid);
         // Send email to user
-        await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
+        if (order && user) {
+          await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
+        } else {
+          console.log('Order or user not found at if');
+        }
 
         return this.paymentRepository.save(finishedPayment)
       } else {
@@ -70,10 +74,14 @@ export class PaymentService {
           apiresponse: result,
         });
 
-        let order = this.orderRepository.findOne({ where: { orderid: payment.orderid } });
-        let user = this.userRepository.findOne({ where: { userid: (await order).userid } });
+        let order = await this.orderService.findOne(payment.orderid);
+        let user = await this.userService.findOne((await order).userid);
         // Send email to user
-        await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
+        if (order && user) {
+          await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
+        } else {
+          console.log('Order or user not found at else');
+        }
 
         return this.paymentRepository.save(finishedPayment);
       }
@@ -85,10 +93,14 @@ export class PaymentService {
         errormessage: error.message,
       });
 
-      let order = this.orderRepository.findOne({ where: { orderid: payment.orderid } });
-      let user = this.userRepository.findOne({ where: { userid: (await order).userid } });
-      // Send email to user
-      await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
+      let order = await this.orderService.findOne(payment.orderid);
+        let user = await this.userService.findOne((await order).userid);
+        // Send email to user
+        if (order && user) {
+          await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
+        } else {
+          console.log('Order or user not found at catch');
+        }
 
       return this.paymentRepository.save(finishedPayment);
     }

@@ -13,9 +13,9 @@ import { MailService } from './mail.service';
             imports: [ConfigModule],
             useFactory: async (configService: ConfigService) => ({
                 transport: {
-                    host: configService.get<string>('EMAIL_HOST'),
+                    host: configService.get<string>('EMAIL_HOST'),  
                     port: configService.get<number>('EMAIL_PORT'),
-                    secure: false,
+                    secure: true,
                     auth: {
                         user: configService.get<string>('EMAIL_USER'),
                         pass: configService.get<string>('EMAIL_PASS'),
@@ -25,7 +25,7 @@ import { MailService } from './mail.service';
                     from: configService.get<string>('EMAIL_FROM'),
                 },
                 template: {
-                    dir: join(__dirname, 'templates'),
+                    dir: join(__dirname, '..', '..','src', 'mailer', 'templates'),
                     adapter: new HandlebarsAdapter(),
                     options: {
                         strict: true,
