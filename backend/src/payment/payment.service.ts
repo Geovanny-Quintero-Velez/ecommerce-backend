@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as braintree from 'braintree';
 import { ConfigService } from '@nestjs/config';
 import { Order } from 'src/order/entities/order.entity';
+import { User } from 'src/user/entities/user.entity';
+import { MailService } from 'src/mailer/mail.service';
 
 @Injectable()
 export class PaymentService {
@@ -16,7 +18,10 @@ export class PaymentService {
     private paymentRepository: Repository<Payment>,
     private configService: ConfigService,
     @InjectRepository(Order)
-    private orderRepository: Repository<Order>
+    private orderRepository: Repository<Order>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    private mailService: MailService
   ) {
     this.gateway = new braintree.BraintreeGateway({
       environment: braintree.Environment.Sandbox, // O Environment.Production para producción
@@ -52,6 +57,9 @@ export class PaymentService {
         })
 
         let order = this.orderRepository.findOne({ where: { orderid: payment.orderid } });
+        let user = this.userRepository.findOne({ where: { userid: (await order).userid } });
+        // Send email to user
+        await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
 
         return this.paymentRepository.save(finishedPayment)
       } else {
@@ -61,6 +69,12 @@ export class PaymentService {
           errormessage: result.message,
           apiresponse: result,
         });
+
+        let order = this.orderRepository.findOne({ where: { orderid: payment.orderid } });
+        let user = this.userRepository.findOne({ where: { userid: (await order).userid } });
+        // Send email to user
+        await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
+
         return this.paymentRepository.save(finishedPayment);
       }
 
@@ -70,6 +84,12 @@ export class PaymentService {
         status: 'FAILED',
         errormessage: error.message,
       });
+
+      let order = this.orderRepository.findOne({ where: { orderid: payment.orderid } });
+      let user = this.userRepository.findOne({ where: { userid: (await order).userid } });
+      // Send email to user
+      await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
+
       return this.paymentRepository.save(finishedPayment);
     }
   }
