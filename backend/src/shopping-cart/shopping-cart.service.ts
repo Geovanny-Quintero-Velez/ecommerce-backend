@@ -33,7 +33,7 @@ export class ShoppingCartService {
       orderDetail.divide(100)
       orderDetail.add(product.price)
       orderDetail.multiply(item.quantity)
-      item.price=orderDetail.getPrice()
+      item.price=+orderDetail.getPrice()
       const itemBeforeUpdate= await this.orderDetailService.isReplicated(item.orderid,item.productid)
       if(!itemBeforeUpdate){
         const orderD:CreateOrderDetailDto={
