@@ -22,6 +22,7 @@ export class PaymentController {
     description: 'Invalid data'
   })
   create(@Body() createPaymentDto: CreatePaymentDto) {
+    console.log(createPaymentDto)
     return this.paymentService.create(createPaymentDto);
   }
 
@@ -60,4 +61,14 @@ export class PaymentController {
   remove(@Param('id') id: string) {
     return this.paymentService.remove(id);
   }
+
+  @Get('client/token')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  getToken(){
+    return this.paymentService.generateToken();
+  }
+
 }

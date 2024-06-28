@@ -31,6 +31,17 @@ export class PaymentService {
     });
   }
 
+  async generateToken(): Promise<string> {
+    try {
+      const token = await this.gateway.clientToken.generate({});
+      console.log('Generated Braintree token:', token.clientToken);
+      return token.clientToken;
+    } catch (error) {
+      console.error('Error generating Braintree token:', error.message);
+      throw new Error(error.message);
+    }
+  }
+
   async create(createPaymentDto: CreatePaymentDto): Promise<Payment> {
     let payment = this.processPayment(createPaymentDto);
     return payment;
@@ -60,7 +71,8 @@ export class PaymentService {
         let user = await this.userService.findOne((await order).userid);
         // Send email to user
         if (order && user) {
-          await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
+          //await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
+          await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, amount.toString());
         } else {
           console.log('Order or user not found at if');
         }
@@ -74,15 +86,6 @@ export class PaymentService {
           apiresponse: result,
         });
 
-        let order = await this.orderService.findOne(payment.orderid);
-        let user = await this.userService.findOne((await order).userid);
-        // Send email to user
-        if (order && user) {
-          await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
-        } else {
-          console.log('Order or user not found at else');
-        }
-
         return this.paymentRepository.save(finishedPayment);
       }
 
@@ -92,15 +95,6 @@ export class PaymentService {
         status: 'FAILED',
         errormessage: error.message,
       });
-
-      let order = await this.orderService.findOne(payment.orderid);
-        let user = await this.userService.findOne((await order).userid);
-        // Send email to user
-        if (order && user) {
-          await this.mailService.sendOrderPaymentConfirmation((await user).username, (await user).email, (await order).orderid, (await order).price);
-        } else {
-          console.log('Order or user not found at catch');
-        }
 
       return this.paymentRepository.save(finishedPayment);
     }
