@@ -2,7 +2,7 @@ import {IsArray, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } fro
 import { Type } from 'class-transformer';
 
 export class CreateProductDto {
-    @IsUUID()
+  @IsUUID()
   @IsOptional()
   productid?: string;
 
