@@ -19,7 +19,7 @@ export class OrderDetailService {
   }
 
   async findByOrder(id: string): Promise<OrderDetail[]> {
-    const orderDetail = await this.orderDetailsRepository.find({ where: { orderid: id } });
+    const orderDetail = await this.orderDetailsRepository.find({ where: { orderid: id,deletedat:null } });
     if (!orderDetail) {
       throw new NotFoundException(`OrderDetail with ID ${id} not found`);
     }
@@ -27,7 +27,7 @@ export class OrderDetailService {
   }
 
   async findOne(id: string): Promise<OrderDetail> {
-    const orderDetail = await this.orderDetailsRepository.findOne({ where: { orderdetailid: id } });
+    const orderDetail = await this.orderDetailsRepository.findOne({ where: { orderdetailid: id,deletedat:null } });
     if (!orderDetail) {
       throw new NotFoundException(`OrderDetail with ID ${id} not found`);
     }
@@ -35,7 +35,7 @@ export class OrderDetailService {
   }
 
   async findByProductIdOrderID(orderidP: string,productidP:string): Promise<OrderDetail> {
-    const orderDetail = await this.orderDetailsRepository.findOne({ where: { orderid: orderidP ,productid:productidP} });
+    const orderDetail = await this.orderDetailsRepository.findOne({ where: { orderid: orderidP ,productid:productidP,deletedat:null} });
     if (!orderDetail) {
       throw new NotFoundException(`Order Detail not found`);
     }
@@ -43,7 +43,7 @@ export class OrderDetailService {
   }
 
   async isReplicated(id: string,productid:string) {
-    const orderDetail = await this.orderDetailsRepository.find({ where: { orderid: id } });
+    const orderDetail = await this.orderDetailsRepository.find({ where: { orderid: id,deletedat:null } });
     let out=null
     for(let i=0;i<orderDetail.length;i++){
       if(orderDetail[i].productid==productid){
@@ -72,13 +72,15 @@ export class OrderDetailService {
   }
 
   async remove(id: uuid) {
-    const orderD=await this.findOne(id)
-    return await this.orderDetailsRepository.remove(orderD);
+    let orderD=await this.findOne(id)
+    orderD.deletedat=new Date()
+    return await this.orderDetailsRepository.save(orderD);
   }
 
   async removeByProductIdOrderID(orderidP: string,productidP:string) {
-    const orderD=await this.findByProductIdOrderID(orderidP,productidP)
-    return await this.orderDetailsRepository.remove(orderD);
+    let orderD=await this.findByProductIdOrderID(orderidP,productidP)
+    orderD.deletedat=new Date()
+    return await this.orderDetailsRepository.save(orderD);
   }
 
 
