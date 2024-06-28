@@ -18,6 +18,7 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
 import { AuthModule } from './auth/auth.module';
+import { AppMailerModule } from './mailer/mailer.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -28,7 +29,7 @@ import { AuthModule } from './auth/auth.module';
     ProductImageModule, ShippingAddressModule, 
     OrderModule, PaymentModule, ShipmentModule, 
     OrderDetailModule, ReviewModule, WishListModule, 
-    ProductCategoryModule, ProductKeywordModule, UserModule, ShoppingCartModule, AuthModule,
+    ProductCategoryModule, ProductKeywordModule, UserModule, ShoppingCartModule, AuthModule, AppMailerModule
    ],
   controllers: [AppController],
   providers: [AppService],

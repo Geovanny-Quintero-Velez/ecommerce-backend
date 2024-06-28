@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as braintree from 'braintree';
 import { ConfigService } from '@nestjs/config';
+import { Order } from 'src/order/entities/order.entity';
 
 @Injectable()
 export class PaymentService {
@@ -14,6 +15,8 @@ export class PaymentService {
     @InjectRepository(Payment)
     private paymentRepository: Repository<Payment>,
     private configService: ConfigService,
+    @InjectRepository(Order)
+    private orderRepository: Repository<Order>
   ) {
     this.gateway = new braintree.BraintreeGateway({
       environment: braintree.Environment.Sandbox, // O Environment.Production para producción
@@ -47,6 +50,9 @@ export class PaymentService {
           transactionid: result.transaction.id,
           apiresponse: result,
         })
+
+        let order = this.orderRepository.findOne({ where: { orderid: payment.orderid } });
+
         return this.paymentRepository.save(finishedPayment)
       } else {
         const finishedPayment = this.paymentRepository.create({
@@ -66,7 +72,6 @@ export class PaymentService {
       });
       return this.paymentRepository.save(finishedPayment);
     }
-
   }
 
   async update(id: string, updatePaymentDto: UpdatePaymentDto): Promise<Payment> {
