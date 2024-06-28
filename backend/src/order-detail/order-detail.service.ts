@@ -18,6 +18,14 @@ export class OrderDetailService {
     return this.orderDetailsRepository.save(orderDetail);
   }
 
+  async findByOrder(id: string): Promise<OrderDetail[]> {
+    const orderDetail = await this.orderDetailsRepository.find({ where: { orderid: id } });
+    if (!orderDetail) {
+      throw new NotFoundException(`OrderDetail with ID ${id} not found`);
+    }
+    return orderDetail;
+  }
+
   async findOne(id: string): Promise<OrderDetail> {
     const orderDetail = await this.orderDetailsRepository.findOne({ where: { orderdetailid: id } });
     if (!orderDetail) {

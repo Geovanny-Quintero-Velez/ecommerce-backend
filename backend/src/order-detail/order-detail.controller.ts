@@ -34,6 +34,15 @@ export class OrderDetailController {
     return this.orderDetailService.findAll();
   }
 
+  @Get('order/:id')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  findByOrder(@Param("id", ParseUUIDPipe) id:string) {
+    return this.orderDetailService.findByOrder(id);
+  }
+
   @Get(':id')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)
