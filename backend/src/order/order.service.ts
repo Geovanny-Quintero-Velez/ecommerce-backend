@@ -48,8 +48,6 @@ export class OrderService {
     return await this.ordersRepository.find();
   }
 
-  
-
   async findOne(id: string): Promise<Order> {
     const order = await this.ordersRepository.findOne({ where: { orderid: id , deletedat: null} });
     if (!order) {
@@ -98,7 +96,6 @@ export class OrderService {
   async remove(id: uuid) {
     let order=await this.findOne(id)
     order.deletedat=new Date()
-
     return await this.ordersRepository.save(order);
   }
 

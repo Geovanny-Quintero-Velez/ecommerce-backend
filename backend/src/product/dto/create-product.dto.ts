@@ -1,4 +1,4 @@
-import {IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import {IsArray, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateProductDto {
@@ -13,6 +13,11 @@ export class CreateProductDto {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @IsArray()
+  @IsOptional()
+  keyword?: string[];
+
 
   @IsNumber()
   @IsNotEmpty()

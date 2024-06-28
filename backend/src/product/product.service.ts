@@ -85,7 +85,6 @@ export class ProductService {
     .addSelect("array_agg(DISTINCT jsonb_build_object('category', c.name, 'categoryid', c.categoryid)) as categories")
     .innerJoin('productcategory', 'pc', 'p.productid = pc.productid')
     .innerJoin('productimage', 'pi', 'p.productid = pi.productid')
-    .innerJoin('productkeyword', 'pk', 'p.productid = pk.productid')
     .innerJoin('category', 'c', 'pc.categoryid = c.categoryid')
     .where('p.productid = :productId', { productId })
     .groupBy('p.productid')
@@ -132,7 +131,6 @@ export class ProductService {
       .addSelect("array_agg(DISTINCT jsonb_build_object('category', c.name, 'categoryid', c.categoryid)) as categories")
       .innerJoin('productcategory', 'pc', 'p.productid = pc.productid')
       .innerJoin('productimage', 'pi', 'p.productid = pi.productid')
-      .innerJoin('productkeyword', 'pk', 'p.productid = pk.productid')
       .innerJoin('category', 'c', 'pc.categoryid = c.categoryid')
       .groupBy('p.productid')
       .orderBy('p.name');
