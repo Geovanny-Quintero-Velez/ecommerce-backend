@@ -17,11 +17,10 @@ export class ProductCategoryService {
     return this.productCategoryRepository.save(productCategory);
   }
 
-  async remove(productid: string, categoryid: string): Promise<void> {
-    const result = await this.productCategoryRepository.delete({ productid, categoryid });
-    if (result.affected === 0) {
-      throw new NotFoundException('ProductCategory not found');
-    }
+  async remove( categoryid: string,productid: string) {
+    const result = await this.productCategoryRepository.findOne({ where:{productid,categoryid} });
+    console.log(result)
+    return await this.productCategoryRepository.remove(result)
   }
 
   async findAll(): Promise<ProductCategory[]> {

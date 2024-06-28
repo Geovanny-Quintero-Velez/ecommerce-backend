@@ -54,7 +54,8 @@ export class CategoryService {
   }
 
   async remove(id: uuid) {
-    const category=await this.findOne(id)
-    return await this.categoriesRepository.remove(category);
+    let category=await this.findOne(id)
+    category.deletedat=new Date()
+    return await this.categoriesRepository.save(category);
   }
 }
