@@ -8,11 +8,11 @@ export class CreateWishListDto {
 
     @IsUUID()
     @IsNotEmpty()
-    userId: string;
+    userid: string;
   
     @IsUUID()
     @IsNotEmpty()
-    productId: string;
+    productid: string;
 
     @Type(() => Date)
     @IsOptional()

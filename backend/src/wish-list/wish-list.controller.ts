@@ -53,7 +53,7 @@ export class WishListController {
   @Roles([Role.ADMIN,Role.USER])
   @ApiBearerAuth()
   findOne(@Param("id", ParseUUIDPipe) id: string) {
-    return this.wishListService.findOne(id);
+    return this.wishListService.findWishListSummary(id);
   }
 
   @Patch(':id')
