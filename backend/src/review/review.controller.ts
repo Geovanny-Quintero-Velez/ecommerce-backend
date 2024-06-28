@@ -43,6 +43,25 @@ export class ReviewController {
     return this.reviewService.findOne(id);
   }
 
+
+  @Get('admin')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  findAllD() {
+    return this.reviewService.findAllD();
+  }
+
+  @Get('admin/:id')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  findOneD(@Param("id", ParseUUIDPipe) id:string) {
+    return this.reviewService.findOneD(id);
+  }
+
   @Patch(':id')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)

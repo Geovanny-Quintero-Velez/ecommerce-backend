@@ -29,7 +29,7 @@ export class ReviewService {
   }
 
   async findOne(id: string): Promise<Review> {
-    const review = await this.reviewRepository.findOne({ where: { reviewid: id } });
+    const review = await this.reviewRepository.findOne({ where: { reviewid: id,deletedat: null } });
     if (!review) {
       throw new NotFoundException('Review not found');
     }
@@ -37,18 +37,32 @@ export class ReviewService {
   }
 
   async findByProduct(id: string): Promise<Review[]> {
-    const review = await this.reviewRepository.find({ where: { productid: id } });
+    const review = await this.reviewRepository.find({ where: { productid: id,deletedat: null } });
     return review;
   }
 
   async findAll(): Promise<Review[]> {
-    return this.reviewRepository.find();
+    return this.reviewRepository.find({where:{deletedat: null}});
   }
 
-  async remove(id: string): Promise<void> {
-    const result = await this.reviewRepository.delete(id);
-    if (result.affected === 0) {
+  async findOneD(id: string): Promise<Review> {
+    const review = await this.reviewRepository.findOne({ where: { reviewid: id } });
+    if (!review) {
       throw new NotFoundException('Review not found');
     }
+    return review;
+  }
+
+
+  async findAllD(): Promise<Review[]> {
+    return this.reviewRepository.find({});
+  }
+
+  async remove(id: string): Promise<Review> {
+    let result = await this.findOne(id);
+    result.deletedat=new Date()
+    return this.reviewRepository.save(result)
+
+
   }
 }

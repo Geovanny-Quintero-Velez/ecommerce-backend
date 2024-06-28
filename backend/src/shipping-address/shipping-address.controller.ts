@@ -43,6 +43,25 @@ export class ShippingAddressController {
     return this.shippingAddressService.findOne(id);
   }
 
+  
+  @Get('admin')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN])
+  @ApiBearerAuth()
+  findAllD() {
+    return this.shippingAddressService.findAllD();
+  }
+
+  @Get(':id')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN,Role.USER])
+  @ApiBearerAuth()
+  findOneD(@Param("id", ParseUUIDPipe) id:string) {
+    return this.shippingAddressService.findOneD(id);
+  }
+
   @Patch(':id')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)

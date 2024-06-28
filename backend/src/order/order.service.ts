@@ -36,7 +36,7 @@ export class OrderService {
     return this.ordersRepository.save(order);
   }
 
-  async findOne(id: string): Promise<Order> {
+  async findOneDeleteds(id: string): Promise<Order> {
     const order = await this.ordersRepository.findOne({ where: { orderid: id } });
     if (!order) {
       throw new NotFoundException(`Order with ID ${id} not found`);
@@ -44,8 +44,22 @@ export class OrderService {
     return order;
   }
 
-  async findAll() {
+  async findAllDeleteds() {
     return await this.ordersRepository.find();
+  }
+
+  
+
+  async findOne(id: string): Promise<Order> {
+    const order = await this.ordersRepository.findOne({ where: { orderid: id , deletedat: null} });
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    }
+    return order;
+  }
+
+  async findAll() {
+    return await this.ordersRepository.find({ where: { deletedat: null  }});
   }
 
   async update(id: uuid, updateOrderDto: UpdateOrderDto) {

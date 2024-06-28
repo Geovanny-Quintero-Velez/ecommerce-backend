@@ -34,6 +34,24 @@ export class OrderController {
     return this.orderService.findAll();
   }
 
+  @Get("admin")
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN])
+  @ApiBearerAuth()
+  findAllDelteds() {
+    return this.orderService.findAllDeleteds();
+  }
+
+  @Get('admin/:id')
+  @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
+  @UseGuards(JwtAuthGuard, RolAuthGuard)
+  @Roles([Role.ADMIN])
+  @ApiBearerAuth()
+  findOneDelted(@Param("id", ParseUUIDPipe) id:string) {
+    return this.orderService.findOneDeleteds(id);
+  }
+
   @Get(':id')
   @ApiUnauthorizedResponse({description:"Unauthorized Bearer Auth"})
   @UseGuards(JwtAuthGuard, RolAuthGuard)

@@ -86,7 +86,7 @@ export class ProductController {
   @Roles([Role.ADMIN])
   @ApiBearerAuth()
   update(@Param("id", ParseUUIDPipe) id:string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+    return this.productService.update(id, updateProductDto);
   }
 
   @Delete(':id')
@@ -95,6 +95,6 @@ export class ProductController {
   @Roles([Role.ADMIN])
   @ApiBearerAuth()
   remove(@Param("id", ParseUUIDPipe) id:string) {
-    return this.productService.remove(+id);
+    return this.productService.remove(id);
   }
 }

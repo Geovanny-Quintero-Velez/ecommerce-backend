@@ -19,7 +19,7 @@ export class UserService {
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { userid: id } });
+    const user = await this.usersRepository.findOne({ where: { userid: id,deletedat: null  } });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
@@ -27,7 +27,7 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findOne({ where: { email,deletedat: null  } });
     if (!user) {
       throw new NotFoundException(`User with email ${email} not found`);
     }
@@ -35,7 +35,7 @@ export class UserService {
   }
 
   async findAll() {
-    return await this.usersRepository.find();
+    return await this.usersRepository.find({ where: { deletedat: null  }});
   }
 
   async update(id: uuid, updateUserDto: UpdateUserDto) {
@@ -52,7 +52,8 @@ export class UserService {
   }
 
   async remove(id: uuid) {
-    const user=await this.findOne(id)
-    return await this.usersRepository.remove(user);
+    let user=await this.findOne(id)
+    user.deletedat=new Date()
+    return await this.usersRepository.save(user);
   }
 }

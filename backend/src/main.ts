@@ -16,6 +16,7 @@ async function bootstrap() {
   );
 
   app.enableCors();
+  console.log(new Date())
 
   const config = new DocumentBuilder()
     .setTitle('Fooddy´s API')

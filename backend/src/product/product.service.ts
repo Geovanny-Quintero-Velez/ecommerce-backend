@@ -33,7 +33,8 @@ export class ProductService {
   }
 
   async findOne(id: string): Promise<Product> {
-    const product = await this.productsRepository.findOne({ where: { productid: id } });
+    const product = await this.productsRepository.findOne({ where: { productid: id,deletedat: null } });
+
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
@@ -41,7 +42,11 @@ export class ProductService {
   }
 
   async findAll() {
-    return await this.productsRepository.find();
+    return await this.productsRepository.find({
+      where: {
+        deletedat: null
+      }
+    });
   }
 
   async findProductSummary(productId: string): Promise<any> {
@@ -60,20 +65,24 @@ export class ProductService {
     ])
     .addSelect('array_agg(DISTINCT pi.img) as imageurls')
     .addSelect('array_agg(DISTINCT pk.keyword) as keywords')
-    .innerJoin('productcategory', 'pd', 'p.productid = pd.productid')
+    .addSelect('array_agg(DISTINCT c.name) as categories')
+    .innerJoin('productcategory', 'pc', 'p.productid = pc.productid')
     .innerJoin('productimage', 'pi', 'p.productid = pi.productid')
     .innerJoin('productkeyword', 'pk', 'p.productid = pk.productid')
+    .innerJoin('category', 'c', 'pc.categoryid = c.categoryid')
     .where('p.productid = :productId', { productId })
     .groupBy('p.productid')
     .orderBy('p.name');
-
     const resultQ = await query.getRawMany()
     let result={
       ...resultQ.pop(),
       reviewscount:0,
       rating:0
     }
-    console.log(result)
+
+    if(result.deletedat || !result.productid){
+      throw new NotFoundException(`Product with ID ${productId} not found`)
+    }
     const reviews=await this.reviewsService.findByProduct(productId)
     result.reviewscount=reviews.length
     let rating=0
@@ -98,7 +107,8 @@ export class ProductService {
   }
 
   async remove(id: uuid) {
-    const product=await this.findOne(id)
-    return await this.productsRepository.remove(product);
+    let product=await this.findOne(id)
+    product.deletedat=new Date()
+    return await this.productsRepository.save(product);
   }
 }
