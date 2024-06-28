@@ -54,6 +54,7 @@ export class WishListService {
       'p.name as name',
       'p.description as description',
       'p.price as price',
+      'p.keyword as keyword',
       'p.stock as stock',
       'p.discount as discount',
       'p.createdat as createdat',

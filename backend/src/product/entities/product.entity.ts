@@ -12,6 +12,9 @@ export class Product {
   
     @Column({ type: 'text', nullable: true })
     description?: string;
+
+    @Column({ type: 'text', array: true, default: [] })
+    keyword: string[];
   
     @Column({ type: 'decimal', precision: 10, scale: 2 })
     price: number;
