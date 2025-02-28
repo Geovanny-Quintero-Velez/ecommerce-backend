@@ -3,11 +3,11 @@ import { PaymentService } from './payment.service';
 import { PaymentController } from './payment.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Payment } from './entities/payment.entity';
-import { Order } from 'src/order/entities/order.entity';
-import { User } from 'src/user/entities/user.entity';
-import { OrderModule } from 'src/order/order.module';
-import { UserModule } from 'src/user/user.module';
-import { AppMailerModule } from 'src/mailer/mailer.module';
+import { Order } from '../order/entities/order.entity';
+import { User } from '../user/entities/user.entity';
+import { OrderModule } from '../order/order.module';
+import { UserModule } from '../user/user.module';
+import { AppMailerModule } from '../mailer/mailer.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Payment, Order, User]),

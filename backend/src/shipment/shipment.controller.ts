@@ -3,9 +3,9 @@ import { ShipmentService } from './shipment.service';
 import { CreateShipmentDto } from './dto/create-shipment.dto';
 import { UpdateShipmentDto } from './dto/update-shipment.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Role } from 'src/user/Role/role.enum';
-import { Roles } from 'src/decorator/rol.decorator';
+import { JwtAuthGuard, RolAuthGuard } from '../auth/jwt-auth.guard';
+import { Role } from '../user/Role/role.enum';
+import { Roles } from '../decorator/rol.decorator';
 
 @Controller('shipment')
 @ApiTags("Shipment")

@@ -3,9 +3,9 @@ import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Role } from 'src/user/Role/role.enum';
-import { Roles } from 'src/decorator/rol.decorator';
+import { JwtAuthGuard, RolAuthGuard } from '../auth/jwt-auth.guard';
+import { Role } from '../user/Role/role.enum';
+import { Roles } from '../decorator/rol.decorator';
 
 @Controller('order')
 @ApiTags("Order")

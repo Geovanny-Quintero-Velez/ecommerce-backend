@@ -3,9 +3,9 @@ import { ShippingAddressService } from './shipping-address.service';
 import { CreateShippingAddressDto } from './dto/create-shipping-address.dto';
 import { UpdateShippingAddressDto } from './dto/update-shipping-address.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Role } from 'src/user/Role/role.enum';
-import { Roles } from 'src/decorator/rol.decorator';
+import { JwtAuthGuard, RolAuthGuard } from '../auth/jwt-auth.guard';
+import { Role } from '../user/Role/role.enum';
+import { Roles } from '../decorator/rol.decorator';
 
 @Controller('shipping-address')
 @ApiTags("Shipping Address")

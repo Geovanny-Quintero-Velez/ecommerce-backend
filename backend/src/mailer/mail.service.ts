@@ -40,4 +40,18 @@ export class MailService {
       },
     });
   }
+
+  async sendTestEmail(to: string) {
+    try {
+      await this.mailerService.sendMail({
+        to,
+        subject: 'Correo de Prueba',
+        text: 'Este es un correo de prueba enviado desde NestJS con Gmail SMTP.',
+        html: '<b>Este es un correo de prueba enviado desde NestJS con Gmail SMTP.</b>',
+      });
+      console.log('Correo enviado con éxito');
+    } catch (error) {
+      console.error('Error al enviar correo:', error);
+    }
+  }
 }

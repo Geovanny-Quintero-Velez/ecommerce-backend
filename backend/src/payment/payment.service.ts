@@ -6,11 +6,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as braintree from 'braintree';
 import { ConfigService } from '@nestjs/config';
-import { Order } from 'src/order/entities/order.entity';
-import { User } from 'src/user/entities/user.entity';
-import { MailService } from 'src/mailer/mail.service';
-import { OrderService } from 'src/order/order.service';
-import { UserService } from 'src/user/user.service';
+import { Order } from '../order/entities/order.entity';
+import { User } from '../user/entities/user.entity';
+import { MailService } from '../mailer/mail.service';
+import { OrderService } from '../order/order.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class PaymentService {

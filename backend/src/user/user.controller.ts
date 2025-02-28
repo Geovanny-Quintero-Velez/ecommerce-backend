@@ -4,9 +4,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard, RolAuthGuard } from '../auth/jwt-auth.guard';
 import { Role } from './Role/role.enum';
-import { Roles } from 'src/decorator/rol.decorator';
+import { Roles } from '../decorator/rol.decorator';
 
 @Controller('user')
 @ApiTags("User")

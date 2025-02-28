@@ -3,9 +3,9 @@ import { ProductKeywordService } from './product-keyword.service';
 import { CreateProductKeywordDto } from './dto/create-product-keyword.dto';
 import { UpdateProductKeywordDto } from './dto/update-product-keyword.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Role } from 'src/user/Role/role.enum';
-import { Roles } from 'src/decorator/rol.decorator';
+import { JwtAuthGuard, RolAuthGuard } from '../auth/jwt-auth.guard';
+import { Role } from '../user/Role/role.enum';
+import { Roles } from '../decorator/rol.decorator';
 
 @Controller('product-keyword')
 @ApiTags("Product Keyword")

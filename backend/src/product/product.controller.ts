@@ -3,9 +3,9 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Roles } from 'src/decorator/rol.decorator';
-import { Role } from 'src/user/Role/role.enum';
+import { JwtAuthGuard, RolAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../decorator/rol.decorator';
+import { Role } from '../user/Role/role.enum';
 
 @Controller('product')
 @ApiTags("Product")

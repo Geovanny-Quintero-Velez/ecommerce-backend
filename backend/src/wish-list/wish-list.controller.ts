@@ -3,9 +3,9 @@ import { WishListService } from './wish-list.service';
 import { CreateWishListDto } from './dto/create-wish-list.dto';
 import { UpdateWishListDto } from './dto/update-wish-list.dto';
 import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Role } from 'src/user/Role/role.enum';
-import { Roles } from 'src/decorator/rol.decorator';
+import { JwtAuthGuard, RolAuthGuard } from '../auth/jwt-auth.guard';
+import { Role } from '../user/Role/role.enum';
+import { Roles } from '../decorator/rol.decorator';
 
 @Controller('wish-list')
 @ApiTags("Wish List")

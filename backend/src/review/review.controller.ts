@@ -3,9 +3,9 @@ import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { Roles } from 'src/decorator/rol.decorator';
-import { Role } from 'src/user/Role/role.enum';
-import { JwtAuthGuard, RolAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard, RolAuthGuard } from '../auth/jwt-auth.guard';
+import { Role } from '../user/Role/role.enum';
+import { Roles } from '../decorator/rol.decorator';
 
 @Controller('review')
 @ApiTags("Review")

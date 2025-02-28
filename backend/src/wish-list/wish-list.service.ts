@@ -4,7 +4,7 @@ import { UpdateWishListDto } from './dto/update-wish-list.dto';
 import { WishList } from './entities/wish-list.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ReviewService } from 'src/review/review.service';
+import { ReviewService } from '../review/review.service';
 
 @Injectable()
 export class WishListService {

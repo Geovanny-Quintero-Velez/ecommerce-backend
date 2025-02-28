@@ -3,8 +3,8 @@ import { LoginAuthDto } from './dto/login-auth.dto';
 import { hash, compare } from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { UserService } from 'src/user/user.service';
-import { Role } from 'src/user/Role/role.enum';
+import { UserService } from '../user/user.service';
+import { Role } from '../user/Role/role.enum';
 
 
 @Injectable()

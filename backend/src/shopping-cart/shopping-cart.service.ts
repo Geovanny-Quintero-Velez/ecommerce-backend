@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateShoppingCartDto } from './dto/update-shopping-cart.dto';
-import { OrderService } from 'src/order/order.service';
-import { OrderDetailService } from 'src/order-detail/order-detail.service';
-import { CreateOrderDetailDto } from 'src/order-detail/dto/create-order-detail.dto';
+import { OrderService } from '../order/order.service';
+import { OrderDetailService } from '../order-detail/order-detail.service';
+import { CreateOrderDetailDto } from '../order-detail/dto/create-order-detail.dto';
 import {v4 as uuid} from  'uuid';
 import Big from 'big.js';
-import { OrderDetail } from 'src/order-detail/entities/order-detail.entity';
-import { ProductService } from 'src/product/product.service';
+import { OrderDetail } from '../order-detail/entities/order-detail.entity';
+import { ProductService } from '../product/product.service';
 
 @Injectable()
 export class ShoppingCartService {

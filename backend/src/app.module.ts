@@ -19,11 +19,15 @@ import { UserModule } from './user/user.module';
 import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
 import { AuthModule } from './auth/auth.module';
 import { AppMailerModule } from './mailer/mailer.module';
+import { UserSeeder } from './database/seeds/user.seed';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [ConfigModule.forRoot({
     isGlobal:true
   }), 
+    TypeOrmModule.forFeature([User]),
     DatabaseModule,
     CategoryModule, ProductModule, 
     ProductImageModule, ShippingAddressModule, 
@@ -32,6 +36,7 @@ import { AppMailerModule } from './mailer/mailer.module';
     ProductCategoryModule, ProductKeywordModule, UserModule, ShoppingCartModule, AuthModule, AppMailerModule
    ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UserSeeder], // Se agrega el UserSeeder como provider
+  exports: [UserSeeder],
 })
 export class AppModule {}

@@ -5,8 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import {v4 as uuid} from  'uuid';
 import { Repository } from 'typeorm';
-import { ProductCategoryService } from 'src/product-category/product-category.service';
-import { ReviewService } from 'src/review/review.service';
+import { ProductCategoryService } from '../product-category/product-category.service';
+import { ReviewService } from '../review/review.service';
 
 @Injectable()
 export class ProductService {
